@@ -22,70 +22,28 @@ button{font:inherit;color:inherit}.aurora{position:fixed;border-radius:50%;filte
 .snake-wrap{max-width:420px;margin:auto}.snake-canvas{width:100%;aspect-ratio:1;background:linear-gradient(160deg,#0b1717,#081012);border:1px solid #ffffff14;border-radius:22px;display:block;box-shadow:inset 0 0 30px #000}.dpad{display:grid;grid-template-columns:repeat(3,58px);gap:7px;justify-content:center;margin-top:16px}.dpad button{height:48px;border:1px solid #ffffff18;border-radius:15px;background:linear-gradient(180deg,#261b39,#140e20);font-size:20px}.dpad .empty{visibility:hidden}.toast{position:fixed;z-index:30;left:50%;bottom:28px;transform:translate(-50%,20px);opacity:0;background:#21162f;border:1px solid #ffffff20;padding:12px 16px;border-radius:15px;box-shadow:0 12px 35px #0009;transition:.25s;pointer-events:none;font-size:12px;font-weight:800}.toast.show{opacity:1;transform:translate(-50%,0)}
 @media(max-width:390px){.app-shell{padding-left:12px;padding-right:12px}.hero-card{padding:19px;min-height:190px}.hero-card h2{font-size:29px}.hero-orb{width:76px;height:76px;flex-basis:76px;border-radius:24px}.hero-orb span{font-size:37px}.game-grid{gap:10px}.game-card{padding:11px;border-radius:21px;min-height:190px}.game-card .art{height:92px}.game-card .emoji{font-size:46px}.mode-badge{top:18px;right:17px}.game-stage{padding:12px}.connect-board{gap:4px;padding:8px}.ttt-board .cell{font-size:42px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+
+/* SRB Games install CTA + branded header icon */
+.brand-logo{padding:0;overflow:hidden;background:#120d20;}
+.brand-logo img{width:100%;height:100%;display:block;object-fit:cover;border-radius:15px;}
 .install-btn{
-  position: fixed;
-  left: 50%;
-  bottom: 18px;
-  transform: translateX(-50%);
-  z-index: 9999;
-
-  display: flex;
-  align-items: center;
-  gap: 10px;
-
-  border: 1px solid rgba(255,255,255,.22);
-  border-radius: 18px;
-  padding: 9px 18px 9px 10px;
-
-  color: #fff;
-  font-size: 15px;
-  font-weight: 800;
-
-  background:
-    linear-gradient(135deg,#7b2cff,#d72cff 48%,#167dff);
-
-  box-shadow:
-    0 8px 25px rgba(113,42,255,.5),
-    inset 0 1px 1px rgba(255,255,255,.35);
-
-  cursor: pointer;
-  min-width: 210px;
-  justify-content: center;
-
-  animation: installFloat 2.2s ease-in-out infinite;
+  position:fixed;left:50%;bottom:max(16px,env(safe-area-inset-bottom));transform:translateX(-50%);
+  z-index:9999;width:min(calc(100% - 28px),430px);min-height:64px;padding:8px 12px 8px 9px;
+  border:1px solid rgba(255,255,255,.28);border-radius:21px;color:#fff;cursor:pointer;
+  display:flex;align-items:center;gap:11px;text-align:left;
+  background:linear-gradient(135deg,rgba(114,45,255,.97),rgba(231,47,197,.97) 48%,rgba(25,133,255,.97));
+  box-shadow:0 14px 38px rgba(106,42,255,.48),inset 0 1px 1px rgba(255,255,255,.48),inset 0 -8px 18px rgba(48,10,104,.25);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  animation:installFloat 2.4s ease-in-out infinite;
 }
-
-.install-btn img{
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
-  object-fit: cover;
-
-  box-shadow:
-    0 3px 10px rgba(0,0,0,.35),
-    0 0 12px rgba(255,255,255,.18);
-}
-
-.install-btn:active{
-  transform: translateX(-50%) scale(.96);
-}
-
-@keyframes installFloat{
-  0%,100%{
-    transform: translateX(-50%) translateY(0);
-    box-shadow: 0 8px 25px rgba(113,42,255,.5);
-  }
-
-  50%{
-    transform: translateX(-50%) translateY(-4px);
-    box-shadow: 0 13px 32px rgba(215,44,255,.62);
-  }
-}
-
-@media (max-width: 480px){
-  .install-btn{
-    bottom: 14px;
-    width: calc(100% - 32px);
-    max-width: 360px;
-  }
-}
+.install-btn[hidden]{display:none!important;}
+.install-btn img{width:48px;height:48px;flex:0 0 48px;border-radius:14px;object-fit:cover;box-shadow:0 5px 13px rgba(0,0,0,.35),inset 0 1px rgba(255,255,255,.4);}
+.install-copy{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1;}
+.install-copy strong{font-size:15px;line-height:1.1;font-weight:950;letter-spacing:.1px;}
+.install-copy small{font-size:10px;color:rgba(255,255,255,.78);font-weight:750;letter-spacing:.25px;}
+.install-arrow{width:33px;height:33px;display:grid;place-items:center;border-radius:12px;background:rgba(7,5,20,.22);border:1px solid rgba(255,255,255,.2);font-size:20px;font-weight:1000;box-shadow:inset 0 1px rgba(255,255,255,.15);}
+.install-btn:active{animation:none;transform:translateX(-50%) scale(.97);}
+@keyframes installFloat{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-4px)}}
+@media (min-width:700px){.install-btn{bottom:22px;}}
+@media (prefers-reduced-motion:reduce){.install-btn{animation:none;}}
+body.install-cta-visible .app-shell{padding-bottom:112px;}

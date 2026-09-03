@@ -35,37 +35,47 @@
 
   function snakeGame(){ hud.innerHTML=`<div class="hud"><div class="hud-card turn-active"><span>SCORE</span><strong id="snakeScore">0</strong></div><div class="hud-card"><span>BEST</span><strong>${stats.snake}</strong></div></div>`;stage.innerHTML=`<div class="snake-wrap"><canvas class="snake-canvas" width="360" height="360"></canvas><div class="dpad"><span class="empty"></span><button data-d="u">↑</button><span class="empty"></span><button data-d="l">←</button><button data-d="d">↓</button><button data-d="r">→</button></div><p class="game-help">Swipe the board or use controls • Speed increases as you grow</p></div>`;const c=stage.querySelector('canvas'),ctx=c.getContext('2d'),N=18,S=c.width/N;let snake=[{x:9,y:9},{x:8,y:9},{x:7,y:9}],dir={x:1,y:0},next={x:1,y:0},food={},score=0,timer,startX,startY;function spawn(){do{food={x:Math.floor(Math.random()*N),y:Math.floor(Math.random()*N)}}while(snake.some(s=>s.x===food.x&&s.y===food.y));}function set(d){let m={u:{x:0,y:-1},d:{x:0,y:1},l:{x:-1,y:0},r:{x:1,y:0}}[d];if(m.x!==-dir.x||m.y!==-dir.y)next=m;}function paint(){ctx.clearRect(0,0,c.width,c.height);ctx.fillStyle='#0b1515';ctx.fillRect(0,0,c.width,c.height);ctx.strokeStyle='rgba(255,255,255,.035)';for(let i=0;i<=N;i++){ctx.beginPath();ctx.moveTo(i*S,0);ctx.lineTo(i*S,c.height);ctx.stroke();ctx.beginPath();ctx.moveTo(0,i*S);ctx.lineTo(c.width,i*S);ctx.stroke()}snake.forEach((s,i)=>{let g=ctx.createLinearGradient(s.x*S,s.y*S,(s.x+1)*S,(s.y+1)*S);g.addColorStop(0,i?'#77ed58':'#d7ff66');g.addColorStop(1,i?'#16b99b':'#4de3a4');ctx.fillStyle=g;ctx.shadowColor='#65ff88';ctx.shadowBlur=i?7:14;roundRect(ctx,s.x*S+2,s.y*S+2,S-4,S-4,6);ctx.fill();});ctx.shadowBlur=18;ctx.fillStyle='#ff4f8b';ctx.beginPath();ctx.arc(food.x*S+S/2,food.y*S+S/2,S*.31,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;}function roundRect(x,a,b,w,h,r){x.beginPath();x.roundRect(a,b,w,h,r)}function tick(){dir=next;let h={x:snake[0].x+dir.x,y:snake[0].y+dir.y};if(h.x<0||h.x>=N||h.y<0||h.y>=N||snake.some(s=>s.x===h.x&&s.y===h.y)){clearInterval(timer);stats.snake=Math.max(stats.snake,score);save();showToast(`Game over • Score ${score}`);return;}snake.unshift(h);if(h.x===food.x&&h.y===food.y){score++;$('#snakeScore').textContent=score;ping(650,.05);spawn();clearInterval(timer);timer=setInterval(tick,Math.max(70,145-score*4));}else snake.pop();paint();}function key(e){let m={ArrowLeft:'l',ArrowRight:'r',ArrowUp:'u',ArrowDown:'d'}[e.key];if(m){e.preventDefault();set(m)}}stage.querySelectorAll('[data-d]').forEach(b=>b.addEventListener('click',()=>set(b.dataset.d)));c.addEventListener('touchstart',e=>{startX=e.touches[0].clientX;startY=e.touches[0].clientY},{passive:true});c.addEventListener('touchend',e=>{let dx=e.changedTouches[0].clientX-startX,dy=e.changedTouches[0].clientY-startY;if(Math.max(Math.abs(dx),Math.abs(dy))<20)return;set(Math.abs(dx)>Math.abs(dy)?(dx>0?'r':'l'):(dy>0?'d':'u'));},{passive:true});window.addEventListener('keydown',key);spawn();paint();timer=setInterval(tick,145);cleanup=()=>{clearInterval(timer);window.removeEventListener('keydown',key)}; }
 
-  renderHome();updateStats();
+  // PWA install button. Always gives the user a useful install path when not already installed.
+  let deferredPrompt=null;
+  const installBtn=document.getElementById('installBtn');
+  const isStandalone=()=>window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
+  const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
+
+  function syncInstallButton(){
+    if(!installBtn)return;
+    const installed=isStandalone();
+    installBtn.hidden=installed;
+    document.body.classList.toggle('install-cta-visible',!installed);
+  }
+
+  window.addEventListener('beforeinstallprompt',e=>{
+    e.preventDefault();
+    deferredPrompt=e;
+    syncInstallButton();
+  });
+
+  installBtn?.addEventListener('click',async()=>{
+    if(isStandalone()){syncInstallButton();return;}
+    if(deferredPrompt){
+      deferredPrompt.prompt();
+      try{await deferredPrompt.userChoice;}catch(e){}
+      deferredPrompt=null;
+      syncInstallButton();
+      return;
+    }
+    if(isIOS){
+      showToast('Safari: Share ↑ → Add to Home Screen');
+    }else{
+      showToast('Browser menu ⋮ → Install app / Add to Home screen');
+    }
+  });
+
+  window.addEventListener('appinstalled',()=>{
+    deferredPrompt=null;
+    syncInstallButton();
+    showToast('SRB Games installed! 🎮');
+  });
+
+  renderHome();updateStats();syncInstallButton();
   if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
 })();
-let deferredPrompt;
-
-const installBtn = document.getElementById("installBtn");
-
-window.addEventListener("beforeinstallprompt", (e) => {
-  e.preventDefault();
-
-  deferredPrompt = e;
-
-  installBtn.style.display = "flex";
-});
-
-installBtn.addEventListener("click", async () => {
-
-  if (!deferredPrompt) return;
-
-  deferredPrompt.prompt();
-
-  const { outcome } = await deferredPrompt.userChoice;
-
-  console.log("PWA install:", outcome);
-
-  deferredPrompt = null;
-
-  installBtn.style.display = "none";
-});
-
-window.addEventListener("appinstalled", () => {
-  installBtn.style.display = "none";
-  deferredPrompt = null;
-});

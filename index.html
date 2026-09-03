@@ -8,7 +8,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>SRB Games</title>
   <link rel="manifest" href="manifest.json" />
-  <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+  <link rel="icon" href="icons/icon-192.png" type="image/png" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -16,7 +17,7 @@
   <div id="app" class="app-shell">
     <header class="topbar">
       <div class="brand-wrap">
-        <div class="brand-logo">SRB</div>
+        <div class="brand-logo"><img src="icons/icon-192.png" alt="SRB Games icon" /></div>
         <div><div class="eyebrow">OFFLINE ARCADE</div><h1>SRB Games</h1></div>
       </div>
       <button id="soundBtn" class="icon-btn" aria-label="Toggle sound">🔊</button>
@@ -53,10 +54,13 @@
     </main>
   </div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <button id="installBtn" class="install-btn" type="button" aria-label="Install SRB Games">
+    <img src="icons/icon-192.png" alt="" />
+    <span class="install-copy"><strong>Install SRB Games</strong><small>Play offline anytime</small></span>
+    <span class="install-arrow" aria-hidden="true">↓</span>
+  </button>
+
   <script src="app.js"></script>
-  <button id="installBtn" class="install-btn" style="display:none;">
-  <img src="icons/icon-192.png" alt="SRB Games">
-  <span>Install SRB Games</span>
-</button>
 </body>
 </html>
