@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#6d28d9" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>SRB Games</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="aurora a1"></div><div class="aurora a2"></div><div class="aurora a3"></div>
+  <div id="app" class="app-shell">
+    <header class="topbar">
+      <div class="brand-wrap">
+        <div class="brand-logo">SRB</div>
+        <div><div class="eyebrow">OFFLINE ARCADE</div><h1>SRB Games</h1></div>
+      </div>
+      <button id="soundBtn" class="icon-btn" aria-label="Toggle sound">🔊</button>
+    </header>
+
+    <main id="homeView" class="view active">
+      <section class="hero-card">
+        <div>
+          <span class="pill online-pill">● READY OFFLINE</span>
+          <h2>Pick a game.<br><span>Own the moment.</span></h2>
+          <p>6 polished mini-games • 4 local 2-player games • zero internet needed.</p>
+        </div>
+        <div class="hero-orb" aria-hidden="true"><span>🎮</span></div>
+      </section>
+
+      <section class="section-head"><div><span class="eyebrow">PLAY NOW</span><h3>Game Library</h3></div><span class="count-pill">6 Games</span></section>
+      <section id="gameGrid" class="game-grid"></section>
+
+      <section class="stats-strip">
+        <div><strong id="playedCount">0</strong><span>Played</span></div>
+        <div><strong id="winsCount">0</strong><span>2P Wins</span></div>
+        <div><strong id="best2048">0</strong><span>2048 Best</span></div>
+      </section>
+    </main>
+
+    <main id="gameView" class="view">
+      <div class="game-topbar">
+        <button id="backBtn" class="icon-btn" aria-label="Back">←</button>
+        <div class="game-title-wrap"><span id="gameMode" class="eyebrow">GAME</span><h2 id="gameTitle">Game</h2></div>
+        <button id="restartBtn" class="icon-btn" aria-label="Restart">↻</button>
+      </div>
+      <div id="gameHud"></div>
+      <div id="gameStage" class="game-stage"></div>
+    </main>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
