@@ -1,11 +1,11 @@
 {
   "name": "SRB Games",
   "short_name": "SRB Games",
-  "description": "Offline mini arcade with 6 games.",
+  "description": "Offline mini arcade with 12 games.",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#090712",
-  "theme_color": "#6d28d9",
+  "theme_color": "#000000",
   "orientation": "portrait-primary",
   "icons": [
     {

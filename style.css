@@ -194,3 +194,41 @@ body.game-hockey #gameHud .hud-card{padding:6px 10px}
   body.game-hockey .game-stage{padding:2px}.hockey-canvas{border-radius:17px}
   .game-result-card,.confirm-card{padding:24px 18px;border-radius:26px}.game-result-card h2,.confirm-card h2{font-size:27px}
 }
+
+
+/* v9: 24-card Memory Match + cleaner versus turn presentation */
+.memory-board{grid-template-columns:repeat(4,1fr);gap:7px;max-width:390px}
+.memory-card{aspect-ratio:.88}
+.memory-face{font-size:30px}
+body.game-memory2 .turn-banner{background:rgba(0,0,0,.28)}
+body.game-memory2 .turn-banner>div{min-width:0;padding:0;background:none;border:0;box-shadow:none;backdrop-filter:none}
+body.game-memory2 .turn-banner span{display:none}
+body.game-memory2 .turn-banner strong{margin:0;font-size:clamp(28px,9vw,44px);font-weight:1000;letter-spacing:1px;color:#fff;text-shadow:0 4px 18px #000,0 0 20px #ffffff28}
+body.game-memory2 .turn-player{font-style:normal;display:inline-block;font-size:1.18em;line-height:.8;margin:0 4px;text-shadow:0 0 18px currentColor,0 5px 18px #000}
+body.game-memory2 .turn-player-a{color:#ff62ad}
+body.game-memory2 .turn-player-b{color:#52dcff}
+body.game-memory2 .turn-banner strong b{font:inherit;color:#fff}
+body.game-memory2 #gameHud .hud-card{transition:box-shadow .25s,border-color .25s,transform .25s,filter .25s}
+body.game-memory2 #gameHud .hud-card.turn-active{transform:translateY(-2px);border-color:#ffffff80;box-shadow:0 0 0 1px #fff3,0 0 24px #a855f788,inset 0 0 22px #ffffff12;filter:brightness(1.16)}
+body.game-memory2 #gameHud .hud-card:first-child.turn-active{box-shadow:0 0 0 1px #ff74bd88,0 0 28px #ff4fa488,inset 0 0 22px #ff6db61b}
+body.game-memory2 #gameHud .hud-card:last-child.turn-active{box-shadow:0 0 0 1px #61e4ff88,0 0 28px #38cdf588,inset 0 0 22px #54dfff1b}
+
+/* v9: taller Air Hockey play field */
+.hockey-wrap{max-width:500px;width:100%;margin:auto}
+.hockey-canvas{aspect-ratio:390/820;border-radius:20px}
+body.game-hockey .game-stage{padding:2px 3px 8px}
+@media(max-width:390px){.memory-board{gap:6px}.memory-face{font-size:27px}.hockey-canvas{aspect-ratio:390/820;border-radius:17px}}
+
+
+/* v10: replacement arcade games */
+.art.carrace{background:linear-gradient(145deg,#ff7a2f,#e23669 48%,#5428ff)}
+.art.airstriker{background:linear-gradient(145deg,#28d9ff,#3154e8 52%,#9c46ff)}
+.art.cricket{background:linear-gradient(145deg,#54e596,#17aa72 48%,#1160d8)}
+body.game-carrace .game-stage,body.game-airstriker .game-stage{padding:6px;background:transparent;border:0;box-shadow:none}
+.race-wrap,.air-wrap{position:relative;max-width:430px;margin:auto}.race-canvas,.air-canvas{display:block;width:100%;height:auto;aspect-ratio:360/620;border-radius:22px;border:1px solid #ffffff20;box-shadow:inset 0 0 35px #000,0 13px 30px #0008;touch-action:none;overscroll-behavior:contain}
+.race-start,.air-start{position:absolute;inset:0;border-radius:22px;background:linear-gradient(180deg,#080713bd,#151020eb);backdrop-filter:blur(7px);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center;transition:.25s}.race-start.hidden,.air-start.hidden{opacity:0;pointer-events:none}.race-hero,.air-hero{font-size:68px;filter:drop-shadow(0 14px 16px #0009);animation:bob 2.3s ease-in-out infinite}.race-start h3,.air-start h3{margin:12px 0 4px;font-size:25px;letter-spacing:.8px}.race-start p,.air-start p{margin:0 0 18px;color:#bcb2cc;font-size:11px;line-height:1.5;max-width:240px}
+.race-controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:430px;margin:9px auto 0}.race-controls button{min-height:52px;border-radius:17px;border:1px solid #ffffff1e;background:linear-gradient(145deg,#271b3b,#15101f);font-size:22px;box-shadow:inset 0 2px #ffffff22,0 7px 16px #0005}.race-controls button:active{transform:scale(.96);background:linear-gradient(145deg,#7c3aed,#ec4899)}
+.air-fire{display:flex;align-items:center;justify-content:center;gap:10px;width:min(100%,430px);min-height:56px;margin:9px auto 0;border:1px solid #ffffff31;border-radius:18px;background:linear-gradient(135deg,#ff4f76,#f06d25 55%,#ffc83d);color:white;font-size:16px;font-weight:1000;letter-spacing:1px;box-shadow:inset 0 2px #ffffff55,0 10px 23px #ff5b444a}.air-fire span{font-size:19px}.air-fire:active{transform:scale(.97)}
+body.game-cricket .game-stage{padding:10px}.cricket-arena{max-width:430px;margin:auto;text-align:center}.cricket-scoreline{display:flex;justify-content:center;margin:2px 0 10px}.cricket-scoreline span{padding:7px 12px;border-radius:999px;background:#ffffff0b;border:1px solid #ffffff18;color:#dcd5e7;font-size:9px;font-weight:950;letter-spacing:1px}.cricket-pitch{position:relative;height:220px;border-radius:24px;overflow:hidden;background:linear-gradient(180deg,#17355d,#1b5a58 50%,#b07c43);border:1px solid #ffffff20;box-shadow:inset 0 0 28px #0005,0 12px 24px #0006}.cricket-pitch:before{content:"";position:absolute;left:50%;top:0;bottom:0;width:76px;transform:translateX(-50%);background:linear-gradient(180deg,#c8a66c,#e3c58d);opacity:.8}.stumps{position:absolute;top:19px;left:50%;transform:translateX(-50%);font-size:41px;color:#fff6b1;text-shadow:0 4px 8px #000}.bat{position:absolute;bottom:18px;left:50%;transform:translateX(-50%) rotate(-15deg);font-size:58px;filter:drop-shadow(0 8px 8px #0008)}.cricket-ball{position:absolute;left:50%;top:104px;transform:translate(-50%,-50%);width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-size:21px;font-weight:1000;color:white;background:radial-gradient(circle at 35% 30%,#ff9b9b,#d91638 50%,#66071a);box-shadow:inset 0 2px #fff7,0 7px 15px #0008,0 0 17px #ff335566}.cricket-ball.hit-pop{animation:cricketHitPop .5s cubic-bezier(.2,.8,.2,1)}@keyframes cricketHitPop{40%{transform:translate(-50%,-50%) scale(1.55);filter:brightness(1.5)}100%{transform:translate(-50%,-50%) scale(1)}}
+.timing-meter{height:24px;margin:16px 5px 0;border-radius:12px;overflow:visible;display:grid;grid-template-columns:1.2fr 1fr .8fr 1fr 1.2fr;position:relative;border:2px solid #ffffff24;background:#0a0810;box-shadow:inset 0 3px 8px #0007}.timing-zone{height:100%}.timing-zone.z1{background:linear-gradient(180deg,#515a78,#30364e)}.timing-zone.z2{background:linear-gradient(180deg,#30bfea,#1573c7)}.timing-zone.z6{background:linear-gradient(180deg,#ffdd45,#ff7a2e);box-shadow:0 0 18px #ffb52f99}.timing-meter i{position:absolute;top:-7px;width:5px;height:36px;margin-left:-2px;border-radius:4px;background:#fff;box-shadow:0 0 14px #fff,0 0 24px #a978ff}.timing-labels{display:grid;grid-template-columns:1.2fr 1fr .8fr 1fr 1.2fr;margin:5px 5px 12px;color:#c6bdd3;font-size:10px;font-weight:1000}.cricket-hit{width:100%;min-height:60px;border-radius:20px;border:1px solid #ffffff38;background:linear-gradient(135deg,#16c784,#16a1d8 50%,#7157f6);color:#fff;font-size:20px;font-weight:1000;letter-spacing:1.2px;box-shadow:inset 0 2px #ffffff55,0 11px 22px #17b8bd3f}.cricket-hit:active{transform:scale(.97)}
+@media(max-width:390px){.race-canvas,.air-canvas{border-radius:18px}.race-start,.air-start{border-radius:18px;padding:22px}.race-hero,.air-hero{font-size:57px}.cricket-pitch{height:205px;border-radius:20px}}
