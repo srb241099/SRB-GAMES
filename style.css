@@ -105,3 +105,92 @@ body.install-cta-visible .app-shell{padding-bottom:112px;}
 .update-bar[hidden]{display:none}.update-icon{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(145deg,#f973d2,#8156f6,#32c8ff);box-shadow:inset 0 1px #fff8,0 7px 16px #7c3aed55}.update-copy{min-width:0}.update-copy strong{display:block;font-size:12px}.update-copy small{display:block;color:#aea4c0;font-size:9px;margin-top:2px}.update-bar button{border:0;border-radius:12px;padding:10px 11px;background:linear-gradient(135deg,#8b5cf6,#ec4899);box-shadow:inset 0 1px #fff7,0 7px 18px #a855f755;color:#fff;font-size:9px;font-weight:1000;cursor:pointer}
 @keyframes updateIn{from{opacity:0;transform:translateX(-50%) translateY(16px) scale(.97)}}
 @media(max-width:390px){.instagram-banner{grid-template-columns:44px minmax(0,1fr) auto;gap:8px;padding:10px}.instagram-avatar{width:44px;height:44px}.instagram-follow{padding:9px 10px}.instagram-copy small{display:none}.update-bar{grid-template-columns:34px minmax(0,1fr) auto;gap:7px}.update-icon{width:34px;height:34px}.update-bar button{padding:9px 8px;font-size:8px}}
+
+/* ========================= SRB Games v8 ========================= */
+/* Rich category tabs */
+.game-tabs{gap:10px;padding:6px;border-radius:22px;background:linear-gradient(180deg,#171126,#0d0a16);box-shadow:inset 0 1px #ffffff1b,0 10px 24px #0004}
+.game-tab{min-height:58px;display:flex;align-items:center;justify-content:center;gap:9px;border:1px solid transparent;border-radius:17px;font-size:10px;letter-spacing:.65px;position:relative;overflow:hidden}
+.game-tab.active{border-color:#ffffff2f;background:linear-gradient(135deg,#8b5cf6,#ec4899 58%,#168df4);box-shadow:inset 0 2px #ffffff78,inset 0 -7px 12px #44166d55,0 10px 24px #8b5cf64b}
+.tab-3d-icon{width:33px;height:33px;flex:0 0 33px;border-radius:12px;position:relative;background:linear-gradient(145deg,#ffffff35,#ffffff10);border:1px solid #ffffff3c;box-shadow:inset 0 2px #ffffff4f,inset 0 -5px #0002,0 5px 12px #0005}
+.solo-tab-icon i:before{content:"";position:absolute;width:9px;height:9px;border-radius:50%;left:11px;top:6px;background:linear-gradient(145deg,#fff,#8be7ff);box-shadow:0 0 9px #a8ecff}
+.solo-tab-icon i:after{content:"";position:absolute;width:17px;height:12px;border-radius:9px 9px 6px 6px;left:7px;top:17px;background:linear-gradient(145deg,#d9c7ff,#7f8cff);box-shadow:inset 0 1px #fff7}
+.duo-tab-icon i:before,.duo-tab-icon b:before{content:"";position:absolute;width:8px;height:8px;border-radius:50%;top:6px;box-shadow:0 0 8px currentColor}
+.duo-tab-icon i:after,.duo-tab-icon b:after{content:"";position:absolute;width:13px;height:11px;border-radius:8px 8px 5px 5px;top:17px}
+.duo-tab-icon i:before{left:6px;background:#ffd45f;color:#ffd45f}.duo-tab-icon i:after{left:3px;background:linear-gradient(145deg,#ffd45f,#ff7b4d)}
+.duo-tab-icon b:before{right:6px;background:#79ecff;color:#79ecff}.duo-tab-icon b:after{right:3px;background:linear-gradient(145deg,#79ecff,#6775ff)}
+
+/* Dedicated game view: home branding disappears and play space expands */
+body.playing .topbar{display:none}
+body.playing .app-shell{width:min(100%,620px);padding:8px 10px 22px}
+body.playing #gameView{animation:none}
+.compact-game-header{margin:2px 0 9px;min-height:48px;position:relative}
+.compact-game-header .game-title-wrap{text-align:center;min-width:0}
+.compact-game-header .game-title-wrap h2{font-size:19px;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.game-nav-btn{width:43px;height:43px;border-radius:14px;font-size:21px;flex:0 0 43px}
+body.playing .game-stage{margin-top:8px;min-height:0;border-radius:23px;padding:13px}
+body.playing #installBtn{display:none!important}
+body.playing #gameHud .hud{gap:7px}
+body.playing #gameHud .hud-card{padding:8px 11px;border-radius:14px}
+body.playing #gameHud .hud-card strong{font-size:15px}
+
+/* Full centered results & turn transitions */
+.game-result-layer,.confirm-layer,.turn-banner{position:fixed;inset:0;z-index:12000;display:grid;place-items:center;padding:22px;background:rgba(5,3,11,.72);backdrop-filter:blur(10px)}
+.game-result-layer[hidden],.confirm-layer[hidden],.turn-banner[hidden]{display:none}
+.game-result-card,.confirm-card{width:min(100%,390px);border-radius:30px;border:1px solid #ffffff2d;background:linear-gradient(155deg,#281744,#151020 58%,#101b2c);box-shadow:0 30px 80px #000b,inset 0 2px #ffffff25;padding:28px 24px;text-align:center;animation:resultPop .35s cubic-bezier(.2,.9,.2,1)}
+.game-result-card:before{content:"";position:absolute;pointer-events:none}
+.game-result-icon{font-size:68px;line-height:1;filter:drop-shadow(0 12px 15px #0007);margin-bottom:12px}
+.game-result-card h2,.confirm-card h2{font-size:30px;line-height:1.05;margin:8px 0 9px;letter-spacing:-.8px;background:linear-gradient(90deg,#fff,#f9a8d4,#8be8ff);-webkit-background-clip:text;color:transparent}
+.game-result-card p,.confirm-card p{margin:0 0 20px;color:#b9afca;font-size:13px;line-height:1.45}
+.result-home-btn{width:100%;margin-top:9px;min-height:46px;border-radius:15px;border:1px solid #ffffff1c;background:#ffffff08;color:#c9bfd9;font-size:10px;font-weight:950;letter-spacing:.8px}
+.confirm-icon{width:62px;height:62px;margin:auto;border-radius:20px;display:grid;place-items:center;font-size:32px;background:linear-gradient(145deg,#8b5cf6,#ec4899);box-shadow:inset 0 2px #fff8,0 12px 26px #8b5cf655}
+.confirm-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}.confirm-actions button{min-height:48px;border-radius:15px;border:1px solid #ffffff1c;background:#ffffff09;font-size:10px;font-weight:950;letter-spacing:.6px}.confirm-actions #confirmReset{background:linear-gradient(135deg,#f43f5e,#ec4899);box-shadow:inset 0 1px #fff6}
+.turn-banner{background:rgba(5,3,11,.45);pointer-events:none}
+.turn-banner>div{min-width:min(82vw,330px);padding:25px 26px;border-radius:28px;text-align:center;background:linear-gradient(135deg,#7c3aedee,#ec4899ee 58%,#158df4ee);border:1px solid #ffffff42;box-shadow:0 22px 60px #000a,inset 0 2px #ffffff6a}
+.turn-banner span{display:block;font-size:10px;letter-spacing:2.5px;font-weight:1000;color:#f5dfff}.turn-banner strong{display:block;margin-top:5px;font-size:28px;letter-spacing:.5px}.turn-pop>div{animation:turnPop .75s cubic-bezier(.2,.9,.2,1)}
+@keyframes resultPop{from{opacity:0;transform:scale(.84) translateY(16px)}}@keyframes turnPop{0%{opacity:0;transform:scale(.78)}35%{opacity:1;transform:scale(1.04)}100%{opacity:1;transform:scale(1)}}
+
+/* Memory cards: no text on the back, more polished 3D color */
+.memory-back{overflow:hidden;background:linear-gradient(145deg,#ff5bc8 0%,#8a55ff 45%,#28c9f7 100%);border-color:#ffffff4a;box-shadow:inset 0 3px #ffffff70,inset 0 -9px 18px #34156a55,0 8px 18px #0005}
+.memory-back:before,.memory-back:after{content:"";position:absolute;border-radius:50%;filter:blur(1px)}
+.memory-back:before{width:70%;height:70%;left:-20%;top:-20%;background:radial-gradient(circle,#ffffff70,transparent 65%)}
+.memory-back:after{width:48%;height:48%;right:-10%;bottom:-12%;background:radial-gradient(circle,#38e8ff88,transparent 68%)}
+.memory-back i{width:34%;height:34%;border-radius:11px;transform:rotate(45deg);background:linear-gradient(145deg,#ffffff7a,#ffffff14);border:1px solid #ffffff5c;box-shadow:inset 0 2px #fff8,0 6px 12px #3e1f7955;position:relative;z-index:2}
+.memory-card:nth-child(4n+2) .memory-back{background:linear-gradient(145deg,#ff8a3d,#ff4f9b 48%,#7c4dff)}
+.memory-card:nth-child(4n+3) .memory-back{background:linear-gradient(145deg,#21d4c2,#2997ff 48%,#6954ff)}
+.memory-card:nth-child(4n+4) .memory-back{background:linear-gradient(145deg,#b6ef45,#26c6a1 48%,#2189f5)}
+
+/* Classic Ludo */
+body.game-ludo .game-stage{padding:8px 7px 10px;background:linear-gradient(180deg,#16101f,#09070e)}
+body.game-ludo .compact-game-header{margin-bottom:6px}
+.ludo-hud{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:5px}.ludo-hud>div{padding:6px 10px;border-radius:13px;background:#ffffff08;border:1px solid #ffffff12}.ludo-hud span{display:block;color:#a99fba;font-size:8px;font-weight:900;letter-spacing:.7px}.ludo-hud strong{font-size:14px}
+.ludo-toolbar{height:36px;display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:7px}.ludo-toolbar>span{font-size:8px;font-weight:950;letter-spacing:1px;color:#9f95b4}.ludo-toolbar .mini-chip{height:31px;min-width:34px;border-radius:10px}
+.classic-ludo-board{position:relative;width:min(100%,470px);aspect-ratio:1;margin:auto;display:grid;grid-template-columns:repeat(15,1fr);grid-template-rows:repeat(15,1fr);gap:1px;padding:4px;border-radius:17px;background:#e8e4ef;border:3px solid #f9f7ff;box-shadow:0 16px 36px #0009,inset 0 0 0 2px #21142e;overflow:hidden}
+.ludo-grid-cell{position:relative;min-width:0;min-height:0;background:#f5f2f8;border:1px solid #c7bfd0;display:flex;align-items:center;justify-content:center;gap:1px}
+.home-zone{border-color:transparent}.hz0{background:linear-gradient(145deg,#ff6380,#e11d48)}.hz1{background:linear-gradient(145deg,#ffe568,#e9b512)}.hz2{background:linear-gradient(145deg,#5ce39a,#16a867)}.hz3{background:linear-gradient(145deg,#66b9ff,#2563eb)}
+.path-cell{background:linear-gradient(145deg,#fff,#ded8e7);border-color:#b9b1c1;box-shadow:inset 0 1px #fff}.safe-cell:after{content:"★";position:absolute;font-size:10px;color:#7c3aed99;z-index:0}
+.lane-cell{box-shadow:inset 0 0 0 2px #ffffff70}.lane-0{background:#ff7891}.lane-1{background:#ffe26a}.lane-2{background:#63dda0}.lane-3{background:#70b9ff}
+.center-cell{background:linear-gradient(135deg,#ff4f78 0 25%,#ffd84d 25% 50%,#41d78c 50% 75%,#4f8cff 75%)}
+.classic-center-dice{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:18.5%;aspect-ratio:1;border-radius:22%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:linear-gradient(145deg,#22142f,#0f0b17);border:1px solid #ffffff42;box-shadow:0 8px 18px #0008,inset 0 2px #ffffff24;z-index:12;pointer-events:none}
+.dice-number{font-size:clamp(18px,6vw,30px);font-weight:1000;line-height:1;color:#fff;text-shadow:0 0 14px #a879ff}
+.dice-shell{width:38%;aspect-ratio:1;border-radius:22%;background:linear-gradient(145deg,#fff,#dcd6e7);box-shadow:inset 0 2px #fff,0 4px 10px #0006;position:relative}.dice-shell.rolling{animation:diceRoll .18s linear infinite}
+@keyframes diceRoll{50%{transform:rotate(24deg) scale(.92)}100%{transform:rotate(-18deg)}}
+.die-face{position:absolute;inset:0;display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr;padding:15%}.die-face i{width:38%;aspect-ratio:1;border-radius:50%;background:#241632;place-self:center;visibility:hidden}.d1 .dot-5,.d2 .dot-1,.d2 .dot-9,.d3 .dot-1,.d3 .dot-5,.d3 .dot-9,.d4 .dot-1,.d4 .dot-3,.d4 .dot-7,.d4 .dot-9,.d5 .dot-1,.d5 .dot-3,.d5 .dot-5,.d5 .dot-7,.d5 .dot-9,.d6 .dot-1,.d6 .dot-3,.d6 .dot-4,.d6 .dot-6,.d6 .dot-7,.d6 .dot-9{visibility:visible}
+.classic-token{width:72%;max-width:19px;aspect-ratio:1;padding:0;border-radius:50%;border:1px solid #ffffffc7;background:radial-gradient(circle at 35% 25%,#fff 0 8%,var(--pc) 18% 58%,#271127 100%);box-shadow:inset 0 -3px #0005,0 2px 4px #0007,0 0 0 1px #0003;z-index:4;cursor:pointer}
+.classic-token.movable{animation:classicTokenPulse .62s ease-in-out infinite alternate;box-shadow:0 0 10px var(--pc),0 0 0 2px #fff,inset 0 -3px #0005}
+@keyframes classicTokenPulse{to{transform:scale(1.25);filter:brightness(1.22)}}
+.ludo-roll-btn{margin:8px auto 0;max-width:470px;display:block;min-height:48px}.game-ludo .game-help{margin:7px 4px 0;font-size:9px}
+
+/* Air Hockey gets almost the entire mobile game view */
+body.game-hockey .app-shell{padding-left:6px;padding-right:6px}
+body.game-hockey .game-stage{padding:5px;background:transparent;border:0;box-shadow:none;margin-top:5px}
+body.game-hockey #gameHud{padding:0 5px}
+body.game-hockey #gameHud .hud-card{padding:6px 10px}
+.hockey-wrap{max-width:500px;width:100%;margin:auto}.hockey-canvas{width:100%;aspect-ratio:390/650;border-radius:20px;max-height:none;background:#101025}.hockey-overlay{border-radius:20px;padding:24px}.hockey-start-icon{font-size:58px;margin-bottom:18px;filter:drop-shadow(0 12px 16px #0008)}
+
+@media(max-width:390px){
+  body.playing .app-shell{padding:6px 7px 18px}.compact-game-header{margin-bottom:6px}.game-nav-btn{width:40px;height:40px;flex-basis:40px;border-radius:13px}.compact-game-header .game-title-wrap h2{font-size:17px}
+  body.playing .game-stage{padding:10px;border-radius:20px}.game-tab{font-size:9px;gap:6px}.tab-3d-icon{width:30px;height:30px;flex-basis:30px}
+  .classic-ludo-board{border-radius:13px;padding:3px}.classic-token{max-width:17px}.classic-center-dice{border-radius:18%}.dice-number{font-size:20px}
+  body.game-hockey .game-stage{padding:2px}.hockey-canvas{border-radius:17px}
+  .game-result-card,.confirm-card{padding:24px 18px;border-radius:26px}.game-result-card h2,.confirm-card h2{font-size:27px}
+}

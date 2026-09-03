@@ -43,8 +43,8 @@
 
       <section class="section-head"><div><span class="eyebrow">PLAY NOW</span><h3>Game Library</h3></div><span id="gameCountPill" class="count-pill">3 Games</span></section>
       <div class="game-tabs" role="tablist" aria-label="Game type">
-        <button class="game-tab active" type="button" data-filter="solo" role="tab" aria-selected="true">👤 SINGLE PLAYER</button>
-        <button class="game-tab" type="button" data-filter="multi" role="tab" aria-selected="false">👥 2+ PLAYERS</button>
+        <button class="game-tab active" type="button" data-filter="solo" role="tab" aria-selected="true"><span class="tab-3d-icon solo-tab-icon" aria-hidden="true"><i></i></span><span>SINGLE PLAYER</span></button>
+        <button class="game-tab" type="button" data-filter="multi" role="tab" aria-selected="false"><span class="tab-3d-icon duo-tab-icon" aria-hidden="true"><i></i><b></b></span><span>2+ PLAYERS</span></button>
       </div>
       <section id="gameGrid" class="game-grid"></section>
 
@@ -63,16 +63,37 @@
     </main>
 
     <main id="gameView" class="view">
-      <div class="game-topbar">
-        <button id="backBtn" class="icon-btn" aria-label="Back">←</button>
-        <div class="game-title-wrap"><span id="gameMode" class="eyebrow">GAME</span><h2 id="gameTitle">Game</h2></div>
-        <button id="restartBtn" class="icon-btn" aria-label="Restart">↻</button>
+      <div class="game-topbar compact-game-header">
+        <button id="backBtn" class="icon-btn game-nav-btn" aria-label="Back to games">←</button>
+        <div class="game-title-wrap"><h2 id="gameTitle">Game</h2></div>
+        <button id="restartBtn" class="icon-btn game-nav-btn" aria-label="Reset game">↻</button>
       </div>
       <div id="gameHud"></div>
       <div id="gameStage" class="game-stage"></div>
     </main>
   </div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <div id="turnBanner" class="turn-banner" hidden aria-live="assertive"><div><span>TURN</span><strong id="turnBannerText">PLAYER A</strong></div></div>
+
+  <div id="gameResult" class="game-result-layer" hidden role="dialog" aria-modal="true" aria-labelledby="gameResultTitle">
+    <div class="game-result-card">
+      <div id="gameResultIcon" class="game-result-icon">🏆</div>
+      <h2 id="gameResultTitle">Winner!</h2>
+      <p id="gameResultText"></p>
+      <button id="gameResultAction" type="button" class="primary-game-btn">PLAY AGAIN</button>
+      <button id="gameResultHome" type="button" class="result-home-btn">BACK TO GAMES</button>
+    </div>
+  </div>
+
+  <div id="resetConfirm" class="confirm-layer" hidden role="dialog" aria-modal="true" aria-labelledby="resetConfirmTitle">
+    <div class="confirm-card">
+      <div class="confirm-icon">↻</div>
+      <h2 id="resetConfirmTitle">Reset this game?</h2>
+      <p>Your current progress will be cleared.</p>
+      <div class="confirm-actions"><button id="cancelReset" type="button">CANCEL</button><button id="confirmReset" type="button">RESET GAME</button></div>
+    </div>
+  </div>
 
   <div id="updateBar" class="update-bar" hidden role="status" aria-live="polite">
     <div class="update-icon">✨</div>
