@@ -11,20 +11,14 @@
   <link rel="icon" href="icons/icon-192.png" type="image/png" />
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
   <link rel="stylesheet" href="style.css" />
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-F1ZNNP26PB"></script>
-
-<script>
-  window.dataLayer = window.dataLayer || [];
-
-  function gtag(){
-    dataLayer.push(arguments);
-  }
-
-  gtag('js', new Date());
-
-  gtag('config', 'G-F1ZNNP26PB');
-</script>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-F1ZNNP26PB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-F1ZNNP26PB');
+  </script>
 </head>
 <body>
   <div class="aurora a1"></div><div class="aurora a2"></div><div class="aurora a3"></div>
@@ -42,13 +36,24 @@
         <div>
           <span class="pill online-pill">● READY OFFLINE</span>
           <h2>Pick a game.<br><span>Own the moment.</span></h2>
-          <p>6 polished mini-games • 4 local 2-player games • zero internet needed.</p>
+          <p>10 polished mini-games • local multiplayer + solo arcade • offline ready.</p>
         </div>
         <div class="hero-orb" aria-hidden="true"><span>🎮</span></div>
       </section>
 
-      <section class="section-head"><div><span class="eyebrow">PLAY NOW</span><h3>Game Library</h3></div><span class="count-pill">6 Games</span></section>
+      <section class="section-head"><div><span class="eyebrow">PLAY NOW</span><h3>Game Library</h3></div><span id="gameCountPill" class="count-pill">3 Games</span></section>
+      <div class="game-tabs" role="tablist" aria-label="Game type">
+        <button class="game-tab active" type="button" data-filter="solo" role="tab" aria-selected="true">👤 SINGLE PLAYER</button>
+        <button class="game-tab" type="button" data-filter="multi" role="tab" aria-selected="false">👥 2+ PLAYERS</button>
+      </div>
       <section id="gameGrid" class="game-grid"></section>
+
+      <section class="instagram-banner" aria-label="Follow on Instagram">
+        <img class="instagram-avatar" src="https://scontent.cdninstagram.com/v/t51.82787-19/791641556_18567197476076168_2703142787506747038_n.jpg?stp=dst-jpg_s150x150_tt6&_nc_cat=108&ccb=7-5&_nc_sid=f7ccc5&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLnd3dy4xMDgwLkMzIn0%3D&_nc_ohc=SU3hf-463RwQ7kNvwG7BJwk&_nc_oc=AdrCvg0m4iIaoRceaBClfLU_XbKWOXShCCd6u_S52GHcMnKHnEPfGYjREsSMetyWRBk&_nc_zt=24&_nc_ht=scontent.cdninstagram.com&_nc_gid=OrPAFiwkYdAAMa8R83UsJA&_nc_ss=7b689&oh=00_AQIymjh6Ib0uy65TRt5lSnsM9rcBo6wXR66PQMZ_jcweTA&oe=6A9F2855" alt="Saurabh Rai Instagram profile" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'" />
+        <span class="instagram-avatar avatar-fallback" aria-hidden="true">SR</span>
+        <div class="instagram-copy"><span class="instagram-kicker">FOLLOW THE CREATOR</span><strong>@saurabh_rai_srb</strong><small>Updates • new games • design drops</small></div>
+        <a id="instagramFollow" class="instagram-follow" href="https://www.instagram.com/saurabh_rai_srb/" target="_blank" rel="noopener noreferrer">Follow</a>
+      </section>
 
       <section class="stats-strip">
         <div><strong id="playedCount">0</strong><span>Played</span></div>
@@ -68,6 +73,12 @@
     </main>
   </div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <div id="updateBar" class="update-bar" hidden role="status" aria-live="polite">
+    <div class="update-icon">✨</div>
+    <div class="update-copy"><strong>New SRB Games update</strong><small>A newer version is ready.</small></div>
+    <button id="updateNowBtn" type="button">UPDATE NOW</button>
+  </div>
 
   <button id="installBtn" class="install-btn" type="button" aria-label="Install SRB Games">
     <img src="icons/icon-192.png" alt="" />

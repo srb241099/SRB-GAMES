@@ -54,3 +54,54 @@ body.install-cta-visible .app-shell{padding-bottom:112px;}
 .speed-btn{min-height:42px;border:1px solid #ffffff12;border-radius:13px;background:linear-gradient(180deg,#251a37,#15101f);color:#a99fba;font-size:11px;font-weight:950;letter-spacing:.65px;cursor:pointer;box-shadow:inset 0 1px #ffffff12;transition:.18s ease;}
 .speed-btn.active{color:#fff;border-color:#63f0c288;background:linear-gradient(135deg,#16b99b,#5a7dff 58%,#aa4cff);box-shadow:inset 0 1px #ffffff55,0 6px 18px #16b99b33;transform:translateY(-1px);}
 .speed-btn:active{transform:scale(.96);}
+
+/* v6: extra game art */
+.art.ludo{background:linear-gradient(145deg,#ff4f8b 0 25%,#ffd84d 25% 50%,#46d8ff 50% 75%,#8b5cf6 75%)}
+.art.memory{background:linear-gradient(145deg,#6d5cff,#e64dc8)}
+.art.rps{background:linear-gradient(145deg,#ff8c42,#ff4f8b 52%,#8458ff)}
+.art.hockey{background:linear-gradient(145deg,#1fe1f2,#3f4ef7 50%,#ff4f9f)}
+
+.mini-chip{border:1px solid #ffffff18;background:linear-gradient(180deg,#261a39,#160f22);color:#b8aec9;min-width:42px;height:38px;border-radius:12px;font-size:11px;font-weight:950;cursor:pointer;box-shadow:inset 0 1px #ffffff18}
+.mini-chip.active{color:#fff;border-color:#c47aff99;background:linear-gradient(135deg,#8b5cf6,#ec4899);box-shadow:0 7px 18px #a855f733,inset 0 1px #ffffff55}
+.primary-game-btn{width:100%;min-height:52px;border:1px solid #ffffff2b;border-radius:17px;background:linear-gradient(135deg,#7b42ff,#df47d5 55%,#208dff);color:#fff;font-size:13px;font-weight:950;letter-spacing:.7px;box-shadow:inset 0 1px #ffffff66,inset 0 -7px 14px #47127755,0 10px 26px #7c3aed33;cursor:pointer}
+.primary-game-btn:active{transform:scale(.98)}.primary-game-btn:disabled{opacity:.6;cursor:default}
+
+/* Ludo Mini */
+.ludo-settings,.rps-format{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px}.ludo-settings>span,.rps-format>span{font-size:9px;font-weight:900;letter-spacing:1.2px;color:#9f95b4}
+.ludo-board{position:relative;max-width:360px;margin:0 auto 14px;aspect-ratio:1;border-radius:30px;padding:12px;background:linear-gradient(145deg,#24143f,#111327);border:1px solid #ffffff1c;box-shadow:inset 0 2px #ffffff16,inset 0 -14px 30px #0006,0 12px 28px #0006}
+.ludo-ring{height:100%;display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(4,1fr);gap:6px}
+.ludo-track-cell{min-width:0;border-radius:12px;background:linear-gradient(145deg,#332743,#1b1426);border:1px solid #ffffff12;box-shadow:inset 0 2px #ffffff12;display:flex;align-items:center;justify-content:center;gap:2px;overflow:hidden}.ludo-track-cell.safe{background:linear-gradient(145deg,#3e2860,#22334a);border-color:#ffffff25}.ludo-track-cell:nth-child(n+7):nth-child(-n+18){opacity:.82}
+.ludo-center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:86px;height:86px;border-radius:24px;display:grid;place-items:center;font-size:43px;background:linear-gradient(145deg,#39215b,#15152b);border:1px solid #ffffff28;box-shadow:0 12px 25px #0008,inset 0 2px #ffffff22}
+.ludo-piece{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:9px;font-weight:1000;color:#120b16;background:var(--pc);box-shadow:inset 0 2px #ffffffaa,inset 0 -4px #0003,0 0 10px color-mix(in srgb,var(--pc) 70%,transparent)}
+.ludo-homes{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}.ludo-home{display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:15px;background:#ffffff08;border:1px solid #ffffff12}.ludo-home strong{font-size:11px;color:var(--pc);margin-right:auto}.ludo-token{width:42px;height:42px;border-radius:14px;border:1px solid #ffffff28;background:linear-gradient(145deg,var(--pc),#26172d);box-shadow:inset 0 2px #ffffff66,inset 0 -6px #0004;color:#fff;font-weight:950;cursor:pointer}.ludo-token.movable{animation:tokenPulse .7s ease-in-out infinite alternate;box-shadow:0 0 18px var(--pc),inset 0 2px #fff8}.ludo-token:disabled{opacity:.65}@keyframes tokenPulse{to{transform:translateY(-3px) scale(1.04)}}
+
+/* Memory Match */
+.memory-board{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;max-width:390px;margin:auto;perspective:900px}.memory-card{aspect-ratio:1;border:0;padding:0;background:transparent;cursor:pointer;perspective:700px}.memory-inner{position:relative;display:block;width:100%;height:100%;transform-style:preserve-3d;transition:transform .42s cubic-bezier(.2,.8,.2,1)}.memory-card.flipped .memory-inner{transform:rotateY(180deg)}.memory-back,.memory-face{position:absolute;inset:0;border-radius:17px;display:grid;place-items:center;backface-visibility:hidden;border:1px solid #ffffff24;box-shadow:inset 0 2px #ffffff33,inset 0 -8px 15px #0004,0 7px 15px #0005}.memory-back{font-size:13px;font-weight:1000;letter-spacing:1px;background:linear-gradient(145deg,#7c3aed,#ec4899 60%,#26c6f5)}.memory-face{transform:rotateY(180deg);font-size:34px;background:linear-gradient(145deg,#2b223e,#15101f)}.memory-card.matched .memory-face{background:linear-gradient(145deg,#1d6e63,#293c73);animation:matchPop .35s ease}@keyframes matchPop{50%{transform:rotateY(180deg) scale(1.08)}}
+
+/* RPS */
+.rps-secret,.rps-pass,.rps-result{text-align:center;padding:18px 4px}.round-pill{display:inline-flex;padding:7px 11px;border-radius:999px;background:#ffffff0b;border:1px solid #ffffff15;color:#b7add0;font-size:9px;font-weight:950;letter-spacing:1px}.rps-secret h3,.rps-pass h3,.rps-result h3{font-size:21px;margin:13px 0 18px}.rps-choices{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.rps-choices button{min-height:116px;border:1px solid #ffffff20;border-radius:22px;background:linear-gradient(145deg,#2d2143,#171020);font-size:45px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;box-shadow:inset 0 2px #ffffff26,inset 0 -10px #0004,0 9px 18px #0005;cursor:pointer}.rps-choices button small{text-transform:uppercase;font-size:9px;font-weight:950;letter-spacing:.8px;color:#c1b6d4}.rps-choices button:active{transform:scale(.95)}.pass-icon,.rps-big{font-size:66px;filter:drop-shadow(0 10px 12px #0007)}.rps-pass p{color:#a99fba;font-size:12px;margin:-8px 0 20px}
+
+/* Air Hockey */
+.hockey-wrap{position:relative;max-width:390px;margin:auto}.hockey-canvas{display:block;width:100%;height:auto;aspect-ratio:360/520;border-radius:25px;border:1px solid #ffffff20;box-shadow:inset 0 0 35px #000,0 12px 30px #0007;touch-action:none;overscroll-behavior:contain}.hockey-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px;background:linear-gradient(180deg,#090713cc,#171020e8);border-radius:25px;backdrop-filter:blur(8px);transition:.25s}.hockey-overlay.hidden{opacity:0;pointer-events:none}.hockey-overlay small{margin-top:10px;color:#b4aac6;font-size:10px;font-weight:800;text-align:center}
+
+@media(max-width:390px){.ludo-board{padding:9px;border-radius:24px}.ludo-ring{gap:4px}.ludo-center{width:72px;height:72px;font-size:36px}.ludo-piece{width:18px;height:18px;font-size:8px}.ludo-token{width:38px;height:38px}.rps-choices button{min-height:100px;font-size:39px}.memory-board{gap:7px}.memory-face{font-size:29px}}
+
+
+/* v7 library tabs */
+.game-tabs{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:-2px 0 15px;padding:5px;border-radius:19px;background:#ffffff08;border:1px solid #ffffff12}
+.game-tab{min-height:44px;border:0;border-radius:14px;background:transparent;color:#9e94b5;font-size:10px;font-weight:1000;letter-spacing:.7px;cursor:pointer;transition:.22s ease}
+.game-tab.active{color:#fff;background:linear-gradient(135deg,#8b5cf6,#e742b5 58%,#238cff);box-shadow:inset 0 1px #ffffff69,0 8px 20px #8b5cf646;transform:translateY(-1px)}
+
+/* Creator banner */
+.instagram-banner{margin:18px 0 4px;padding:12px;border:1px solid #ffffff1b;border-radius:23px;background:linear-gradient(115deg,#21132d,#171127 45%,#111a2d);box-shadow:0 12px 30px #0005,inset 0 1px #ffffff18;display:grid;grid-template-columns:48px minmax(0,1fr) auto;gap:11px;align-items:center;position:relative;overflow:hidden}
+.instagram-banner:before{content:"";position:absolute;inset:-80% auto auto 25%;width:160px;height:160px;border-radius:50%;background:#f43f9e33;filter:blur(28px);pointer-events:none}
+.instagram-avatar{width:48px;height:48px;border-radius:50%;object-fit:cover;padding:2px;background:linear-gradient(135deg,#ffb84d,#ff3d8f,#8b5cf6);box-shadow:0 5px 16px #0008;position:relative;z-index:1}
+.avatar-fallback{display:none;place-items:center;font-weight:1000;color:#fff;background:linear-gradient(135deg,#ff8a35,#d637b9,#594cf0)}
+.instagram-copy{min-width:0;position:relative;z-index:1}.instagram-kicker{display:block;color:#f9a8d4;font-size:8px;font-weight:1000;letter-spacing:1.1px}.instagram-copy strong{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:2px 0}.instagram-copy small{display:block;color:#9e94b0;font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.instagram-follow{position:relative;z-index:1;text-decoration:none;color:#fff;font-size:10px;font-weight:1000;padding:10px 13px;border-radius:13px;background:linear-gradient(135deg,#ff8b36,#f03886 45%,#7c4dff);box-shadow:inset 0 1px #ffffff6e,0 7px 18px #db3a8b47;transition:.18s}.instagram-follow:active{transform:scale(.94)}
+
+/* App update prompt */
+.update-bar{position:fixed;left:50%;bottom:94px;transform:translateX(-50%);z-index:10020;width:min(calc(100% - 28px),520px);padding:11px 11px 11px 12px;border-radius:20px;border:1px solid #ffffff2b;background:linear-gradient(135deg,#24133d,#171127 58%,#10213b);box-shadow:0 18px 45px #000a,0 0 35px #8b5cf63a;display:grid;grid-template-columns:38px minmax(0,1fr) auto;gap:9px;align-items:center;animation:updateIn .35s cubic-bezier(.2,.9,.2,1)}
+.update-bar[hidden]{display:none}.update-icon{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(145deg,#f973d2,#8156f6,#32c8ff);box-shadow:inset 0 1px #fff8,0 7px 16px #7c3aed55}.update-copy{min-width:0}.update-copy strong{display:block;font-size:12px}.update-copy small{display:block;color:#aea4c0;font-size:9px;margin-top:2px}.update-bar button{border:0;border-radius:12px;padding:10px 11px;background:linear-gradient(135deg,#8b5cf6,#ec4899);box-shadow:inset 0 1px #fff7,0 7px 18px #a855f755;color:#fff;font-size:9px;font-weight:1000;cursor:pointer}
+@keyframes updateIn{from{opacity:0;transform:translateX(-50%) translateY(16px) scale(.97)}}
+@media(max-width:390px){.instagram-banner{grid-template-columns:44px minmax(0,1fr) auto;gap:8px;padding:10px}.instagram-avatar{width:44px;height:44px}.instagram-follow{padding:9px 10px}.instagram-copy small{display:none}.update-bar{grid-template-columns:34px minmax(0,1fr) auto;gap:7px}.update-icon{width:34px;height:34px}.update-bar button{padding:9px 8px;font-size:8px}}
