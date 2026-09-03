@@ -38,3 +38,34 @@
   renderHome();updateStats();
   if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
 })();
+let deferredPrompt;
+
+const installBtn = document.getElementById("installBtn");
+
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+
+  deferredPrompt = e;
+
+  installBtn.style.display = "flex";
+});
+
+installBtn.addEventListener("click", async () => {
+
+  if (!deferredPrompt) return;
+
+  deferredPrompt.prompt();
+
+  const { outcome } = await deferredPrompt.userChoice;
+
+  console.log("PWA install:", outcome);
+
+  deferredPrompt = null;
+
+  installBtn.style.display = "none";
+});
+
+window.addEventListener("appinstalled", () => {
+  installBtn.style.display = "none";
+  deferredPrompt = null;
+});
