@@ -1,5 +1,5 @@
-const CACHE='srb-games-v12';
-const ASSETS=['./','./index.html','./style.css','./app.js','./manifest.json','./icons/icon-192.png','./icons/icon-512.png'];
+const CACHE='srb-games-v13';
+const ASSETS=['./','./index.html','./style.css?v=13','./app.js?v=13','./manifest.json','./icons/icon-192.png','./icons/icon-512.png'];
 
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)));
