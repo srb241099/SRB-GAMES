@@ -22,3 +22,70 @@ button{font:inherit;color:inherit}.aurora{position:fixed;border-radius:50%;filte
 .snake-wrap{max-width:420px;margin:auto}.snake-canvas{width:100%;aspect-ratio:1;background:linear-gradient(160deg,#0b1717,#081012);border:1px solid #ffffff14;border-radius:22px;display:block;box-shadow:inset 0 0 30px #000}.dpad{display:grid;grid-template-columns:repeat(3,58px);gap:7px;justify-content:center;margin-top:16px}.dpad button{height:48px;border:1px solid #ffffff18;border-radius:15px;background:linear-gradient(180deg,#261b39,#140e20);font-size:20px}.dpad .empty{visibility:hidden}.toast{position:fixed;z-index:30;left:50%;bottom:28px;transform:translate(-50%,20px);opacity:0;background:#21162f;border:1px solid #ffffff20;padding:12px 16px;border-radius:15px;box-shadow:0 12px 35px #0009;transition:.25s;pointer-events:none;font-size:12px;font-weight:800}.toast.show{opacity:1;transform:translate(-50%,0)}
 @media(max-width:390px){.app-shell{padding-left:12px;padding-right:12px}.hero-card{padding:19px;min-height:190px}.hero-card h2{font-size:29px}.hero-orb{width:76px;height:76px;flex-basis:76px;border-radius:24px}.hero-orb span{font-size:37px}.game-grid{gap:10px}.game-card{padding:11px;border-radius:21px;min-height:190px}.game-card .art{height:92px}.game-card .emoji{font-size:46px}.mode-badge{top:18px;right:17px}.game-stage{padding:12px}.connect-board{gap:4px;padding:8px}.ttt-board .cell{font-size:42px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+.install-btn{
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  border: 1px solid rgba(255,255,255,.22);
+  border-radius: 18px;
+  padding: 9px 18px 9px 10px;
+
+  color: #fff;
+  font-size: 15px;
+  font-weight: 800;
+
+  background:
+    linear-gradient(135deg,#7b2cff,#d72cff 48%,#167dff);
+
+  box-shadow:
+    0 8px 25px rgba(113,42,255,.5),
+    inset 0 1px 1px rgba(255,255,255,.35);
+
+  cursor: pointer;
+  min-width: 210px;
+  justify-content: center;
+
+  animation: installFloat 2.2s ease-in-out infinite;
+}
+
+.install-btn img{
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  object-fit: cover;
+
+  box-shadow:
+    0 3px 10px rgba(0,0,0,.35),
+    0 0 12px rgba(255,255,255,.18);
+}
+
+.install-btn:active{
+  transform: translateX(-50%) scale(.96);
+}
+
+@keyframes installFloat{
+  0%,100%{
+    transform: translateX(-50%) translateY(0);
+    box-shadow: 0 8px 25px rgba(113,42,255,.5);
+  }
+
+  50%{
+    transform: translateX(-50%) translateY(-4px);
+    box-shadow: 0 13px 32px rgba(215,44,255,.62);
+  }
+}
+
+@media (max-width: 480px){
+  .install-btn{
+    bottom: 14px;
+    width: calc(100% - 32px);
+    max-width: 360px;
+  }
+}
