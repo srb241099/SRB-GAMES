@@ -40,8 +40,14 @@
     turnTimer=setTimeout(()=>{turnBanner.hidden=true;},900);
   }
   function hideResult(){ resultLayer.hidden=true; }
-  function showGameResult(main,sub='',icon='🏆'){
-    resultTitle.textContent=main; resultText.textContent=sub; resultIcon.textContent=icon; resultLayer.hidden=false; ping(icon==='🏆'?820:540,.1);
+  function showGameResult(main,sub='',icon='🏆',opts={}){
+    resultTitle.textContent=main; resultText.textContent=sub; resultIcon.textContent=icon;
+    resultLayer.classList.toggle('result-2048', opts.variant==='2048');
+    if(opts.variant==='2048'){
+      const score=opts.score ?? 0, best=opts.best ?? 0;
+      resultText.innerHTML=`<span class="result-score-label">CURRENT GAME SCORE</span><strong class="result-score-big">${score}</strong><span class="result-best-score">BEST ${best}</span>`;
+    }
+    resultLayer.hidden=false; ping(icon==='🏆'?820:540,.1);
   }
   $('#gameResultAction').addEventListener('click',()=>{hideResult();startGame();});
   $('#gameResultHome').addEventListener('click',()=>{hideResult(); if(current) history.back(); else goHome(false);});
@@ -117,7 +123,7 @@
     let b=Array(16).fill(0),score=0,startX=0,startY=0,done=false;
     function add(){let e=b.map((v,i)=>v?null:i).filter(v=>v!==null);if(!e.length)return;b[e[Math.floor(Math.random()*e.length)]]=Math.random()<.9?2:4;}
     function moveLine(a){let x=a.filter(Boolean),out=[];for(let i=0;i<x.length;i++){if(x[i]===x[i+1]){out.push(x[i]*2);score+=x[i]*2;i++;}else out.push(x[i]);}while(out.length<4)out.push(0);return out;}
-    function move(dir){if(done)return;let old=b.join(',');if(dir==='l'||dir==='r')for(let r=0;r<4;r++){let row=b.slice(r*4,r*4+4);if(dir==='r')row.reverse();row=moveLine(row);if(dir==='r')row.reverse();b.splice(r*4,4,...row);}else for(let c=0;c<4;c++){let col=[b[c],b[c+4],b[c+8],b[c+12]];if(dir==='d')col.reverse();col=moveLine(col);if(dir==='d')col.reverse();for(let r=0;r<4;r++)b[r*4+c]=col[r];}if(b.join(',')!==old){add();ping(420+Math.min(score,1000)/5,.04);stats.best2048=Math.max(stats.best2048,score);save();draw();}if(!canMove()&&!done){done=true;showGameResult('GAME OVER',`Score ${score} • Best ${stats.best2048}`,'2048');}}
+    function move(dir){if(done)return;let old=b.join(',');if(dir==='l'||dir==='r')for(let r=0;r<4;r++){let row=b.slice(r*4,r*4+4);if(dir==='r')row.reverse();row=moveLine(row);if(dir==='r')row.reverse();b.splice(r*4,4,...row);}else for(let c=0;c<4;c++){let col=[b[c],b[c+4],b[c+8],b[c+12]];if(dir==='d')col.reverse();col=moveLine(col);if(dir==='d')col.reverse();for(let r=0;r<4;r++)b[r*4+c]=col[r];}if(b.join(',')!==old){add();ping(420+Math.min(score,1000)/5,.04);stats.best2048=Math.max(stats.best2048,score);save();draw();}if(!canMove()&&!done){done=true;showGameResult('GAME OVER','', '2048', {variant:'2048',score,best:stats.best2048});}}
     function canMove(){if(b.includes(0))return true;for(let r=0;r<4;r++)for(let c=0;c<4;c++){let i=r*4+c;if(c<3&&b[i]===b[i+1])return true;if(r<3&&b[i]===b[i+4])return true;}return false;}
     function draw(){hud.innerHTML=`<div class="hud"><div class="hud-card turn-active"><span>SCORE</span><strong>${score}</strong></div><div class="hud-card"><span>BEST</span><strong>${stats.best2048}</strong></div></div>`;stage.innerHTML=`<div class="board g2048-board">${b.map(v=>`<div class="tile ${v?'t'+Math.min(v,2048):''}">${v||''}</div>`).join('')}</div><p class="game-help">Swipe anywhere on the board • Arrow keys also work</p>`;let el=stage.querySelector('.g2048-board');el.addEventListener('touchstart',e=>{startX=e.touches[0].clientX;startY=e.touches[0].clientY},{passive:true});el.addEventListener('touchmove',e=>e.preventDefault(),{passive:false});el.addEventListener('touchend',e=>{e.preventDefault();let dx=e.changedTouches[0].clientX-startX,dy=e.changedTouches[0].clientY-startY;if(Math.max(Math.abs(dx),Math.abs(dy))<25)return;move(Math.abs(dx)>Math.abs(dy)?(dx>0?'r':'l'):(dy>0?'d':'u'));},{passive:false});}
     function key(e){let m={ArrowLeft:'l',ArrowRight:'r',ArrowUp:'u',ArrowDown:'d'}[e.key];if(m){e.preventDefault();move(m)}}window.addEventListener('keydown',key);cleanup=()=>window.removeEventListener('keydown',key);add();add();draw();
