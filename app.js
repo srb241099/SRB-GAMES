@@ -1,4 +1,5 @@
 (() => {
+  // SRB Games v13 — compact Air Hockey build.
   const $ = s => document.querySelector(s);
   const home = $('#homeView'), game = $('#gameView'), grid = $('#gameGrid'), stage = $('#gameStage'), hud = $('#gameHud');
   const title = $('#gameTitle'), toast = $('#toast');
@@ -15,6 +16,7 @@
     {id:'sos',name:'SOS',desc:'Build SOS, score points',emoji:'SOS',mode:'2 PLAYERS',art:'sos',type:'multi'},
     {id:'g2048',name:'2048',desc:'Merge tiles, chase 2048',emoji:'2048',mode:'1 PLAYER',art:'g2048',type:'solo'},
     {id:'snake',name:'Snake',desc:'Eat. Grow. Survive.',emoji:'🐍',mode:'1 PLAYER',art:'snake',type:'solo'},
+    {id:'fruitstack',name:'Fruit Stack',desc:'Drop • merge • grow fruits',emoji:'🍉',mode:'1 PLAYER',art:'fruitstack',type:'solo'},
     {id:'memory',name:'Memory Match',desc:'Flip cards, find pairs',emoji:'🃏',mode:'1 PLAYER',art:'memory',type:'solo'},
     {id:'memory2',name:'Memory Match',desc:'Pair hunt with extra turns',emoji:'🃏',mode:'2 PLAYERS',art:'memory',type:'multi'},
     {id:'rps',name:'Rock Paper Scissors',desc:'Secret picks • Best of 3/5',emoji:'✊',mode:'2 PLAYERS',art:'rps',type:'multi'},
@@ -63,7 +65,7 @@
     if(push) history.pushState({srbView:'game',game:id},'',location.pathname+location.search+`#${id}`);
   }
   function goHome(updateHistory=false){ cleanup();hideResult();clearTimeout(turnTimer);turnBanner.hidden=true;game.classList.remove('active');home.classList.add('active');current=null;stage.innerHTML='';hud.innerHTML='';document.body.classList.remove('playing');clearGameClasses();delete stage.dataset.game;if(updateHistory)history.replaceState({srbView:'home'},'',location.pathname+location.search); }
-  function startGame(){ cleanup(); cleanup=()=>{}; hideResult(); stage.innerHTML='';hud.innerHTML=''; if(current==='ttt') ticTacToe(); if(current==='c4') connect4(); if(current==='dots') dotsBoxes(); if(current==='sos') sosGame(); if(current==='g2048') game2048(); if(current==='snake') snakeGame(); if(current==='memory') memoryMatch(false); if(current==='memory2') memoryMatch(true); if(current==='rps') rpsGame(); if(current==='hockey') airHockey(); }
+  function startGame(){ cleanup(); cleanup=()=>{}; hideResult(); stage.innerHTML='';hud.innerHTML=''; if(current==='ttt') ticTacToe(); if(current==='c4') connect4(); if(current==='dots') dotsBoxes(); if(current==='sos') sosGame(); if(current==='g2048') game2048(); if(current==='snake') snakeGame(); if(current==='fruitstack') fruitStack(); if(current==='memory') memoryMatch(false); if(current==='memory2') memoryMatch(true); if(current==='rps') rpsGame(); if(current==='hockey') airHockey(); }
 
   history.replaceState({srbView:'home'},'',location.pathname+location.search);
   window.addEventListener('popstate',e=>{
@@ -189,6 +191,46 @@
       stage.querySelectorAll('[data-rps2]').forEach(b=>b.addEventListener('click',()=>{let p2=b.dataset.rps2,w=result(p1,p2);if(w)score[w]++;const em=x=>choices.find(c=>c[0]===x)[1];if(score[1]>=target||score[2]>=target){done=true;stats.wins++;save();draw();setTimeout(()=>showGameResult(`PLAYER ${w===1?'A':'B'} WINS!`,`${em(p1)} vs ${em(p2)} • ${score[1]} – ${score[2]}`,'🏆'),120);}else{showToast(w?`${em(p1)} vs ${em(p2)} • Player ${w===1?'A':'B'} wins round`:`${em(p1)} vs ${em(p2)} • Draw`);round++;phase=1;p1=null;draw();}}));
     }
     draw();
+  }
+
+  function fruitStack(){
+    const fruits=[
+      {e:'🍒',name:'Cherry',r:17,pts:2},{e:'🍓',name:'Berry',r:22,pts:4},{e:'🍇',name:'Grape',r:27,pts:8},
+      {e:'🍊',name:'Orange',r:34,pts:16},{e:'🍎',name:'Apple',r:42,pts:32},{e:'🍑',name:'Peach',r:50,pts:64},
+      {e:'🍍',name:'Pineapple',r:59,pts:128},{e:'🍉',name:'Watermelon',r:70,pts:256}
+    ];
+    hud.innerHTML=`<div class="fruit-hud"><div><span>SCORE</span><strong id="fruitScore">0</strong></div><div class="fruit-next"><span>NEXT</span><b id="fruitNext">🍒</b></div><div><span>BEST</span><strong id="fruitBest">${+(localStorage.getItem('srbFruitBest')||0)}</strong></div></div>`;
+    stage.innerHTML=`<div class="fruit-game-shell">
+      <div class="fruit-title-row"><div><span>FRUIT DROP</span><strong>Merge the same fruits!</strong></div><div class="fruit-combo" id="fruitCombo">READY</div></div>
+      <div class="fruit-canvas-wrap"><canvas class="fruit-canvas" width="360" height="570" aria-label="Fruit Stack game"></canvas><div class="fruit-danger-label">DANGER LINE</div></div>
+      <div class="fruit-controls"><button type="button" id="fruitLeft" aria-label="Move left">‹</button><button type="button" id="fruitDrop"><span>DROP</span><b id="fruitDropIcon">🍒</b></button><button type="button" id="fruitRight" aria-label="Move right">›</button></div>
+      <p class="game-help">Drag across the box or use arrows • tap DROP to release • matching fruits merge</p>
+    </div>`;
+    const c=stage.querySelector('canvas'),ctx=c.getContext('2d'),W=c.width,H=c.height,dangerY=92;
+    const scoreEl=stage.querySelector('#fruitScore'),bestEl=stage.querySelector('#fruitBest'),nextEl=stage.querySelector('#fruitNext'),dropIcon=stage.querySelector('#fruitDropIcon'),comboEl=stage.querySelector('#fruitCombo');
+    let bodies=[],score=0,best=+(localStorage.getItem('srbFruitBest')||0),aimX=W/2,currentLevel=randomLevel(),nextLevel=randomLevel(),canDrop=true,over=false,raf=0,last=performance.now(),dangerTime=0,comboTimer=0;
+    function randomLevel(){const x=Math.random();return x<.48?0:x<.78?1:2;}
+    function syncPreview(){nextEl.textContent=fruits[nextLevel].e;dropIcon.textContent=fruits[currentLevel].e;}
+    function clampAim(){const r=fruits[currentLevel].r;aimX=Math.max(r+9,Math.min(W-r-9,aimX));}
+    function drop(){if(!canDrop||over)return;clampAim();bodies.push({x:aimX,y:45,vx:0,vy:.2,level:currentLevel,age:0});currentLevel=nextLevel;nextLevel=randomLevel();syncPreview();canDrop=false;ping(480,.04);setTimeout(()=>{canDrop=true;},430);}
+    function addScore(n){score+=n;scoreEl.textContent=score;if(score>best){best=score;bestEl.textContent=best;localStorage.setItem('srbFruitBest',String(best));}}
+    function merge(i,j){const a=bodies[i],b=bodies[j];if(!a||!b||a.level!==b.level||a.level>=fruits.length-1)return false;const nl=a.level+1,nr=fruits[nl].r,x=(a.x+b.x)/2,y=(a.y+b.y)/2,vx=(a.vx+b.vx)/2,vy=Math.min(-1.7,(a.vy+b.vy)/2-1.1);bodies.splice(Math.max(i,j),1);bodies.splice(Math.min(i,j),1);bodies.push({x,y,vx,vy,level:nl,age:0,pop:1});addScore(fruits[nl].pts);comboEl.textContent=`+${fruits[nl].pts} ${fruits[nl].e}`;comboEl.classList.remove('pop');void comboEl.offsetWidth;comboEl.classList.add('pop');clearTimeout(comboTimer);comboTimer=setTimeout(()=>{comboEl.textContent='MERGE!';},700);ping(620+nl*55,.055);return true;}
+    function physics(dt){const step=Math.min(1.6,dt/16.67);for(const b of bodies){b.age+=dt;b.vy+=.22*step;b.x+=b.vx*step;b.y+=b.vy*step;b.vx*=.992;const r=fruits[b.level].r;if(b.x-r<7){b.x=r+7;b.vx=Math.abs(b.vx)*.42}if(b.x+r>W-7){b.x=W-r-7;b.vx=-Math.abs(b.vx)*.42}if(b.y+r>H-8){b.y=H-r-8;b.vy=-Math.abs(b.vy)*.22;if(Math.abs(b.vy)<.7)b.vy=0;}}
+      let merged=false;
+      for(let i=0;i<bodies.length&&!merged;i++)for(let j=i+1;j<bodies.length;j++){const a=bodies[i],b=bodies[j],ra=fruits[a.level].r,rb=fruits[b.level].r,dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy)||.001,min=ra+rb;if(d<min){if(a.level===b.level&&a.age>180&&b.age>180){merged=merge(i,j);break;}const nx=dx/d,ny=dy/d,overlap=min-d;a.x-=nx*overlap*.5;a.y-=ny*overlap*.5;b.x+=nx*overlap*.5;b.y+=ny*overlap*.5;const rvx=b.vx-a.vx,rvy=b.vy-a.vy,sep=rvx*nx+rvy*ny;if(sep<0){const imp=-sep*.34;a.vx-=imp*nx;a.vy-=imp*ny;b.vx+=imp*nx;b.vy+=imp*ny;}}}
+      let danger=bodies.some(b=>b.age>1200&&b.y-fruits[b.level].r<dangerY&&Math.abs(b.vy)<1.2);dangerTime=danger?dangerTime+dt:Math.max(0,dangerTime-dt*2);if(dangerTime>1700)gameOver();
+    }
+    function gameOver(){if(over)return;over=true;canDrop=false;trackEvent('game_over',{game_name:'fruitstack',score});setTimeout(()=>showGameResult('STACK FULL!',`Score ${score} • Best ${best}`,'🍉'),250);}
+    function fruit3d(b){const f=fruits[b.level],r=f.r;ctx.save();ctx.translate(b.x,b.y);if(b.pop){ctx.scale(1+b.pop*.18,1+b.pop*.18);b.pop*=.82;if(b.pop<.03)delete b.pop;}ctx.shadowColor='rgba(0,0,0,.42)';ctx.shadowBlur=12;ctx.shadowOffsetY=7;const g=ctx.createRadialGradient(-r*.35,-r*.4,r*.08,0,0,r);const cols=[['#ff5477','#a90839'],['#ff5578','#b4144a'],['#a76cff','#4c168e'],['#ffb23d','#d64a12'],['#ff5265','#9d1429'],['#ff9a9e','#d44767'],['#ffd64c','#b76b10'],['#56d86c','#168844']][b.level];g.addColorStop(0,'#fff8');g.addColorStop(.16,cols[0]);g.addColorStop(1,cols[1]);ctx.fillStyle=g;ctx.beginPath();ctx.arc(0,0,r,0,Math.PI*2);ctx.fill();ctx.shadowColor='transparent';ctx.strokeStyle='rgba(255,255,255,.28)';ctx.lineWidth=2;ctx.stroke();ctx.font=`${Math.max(20,r*1.12)}px Apple Color Emoji,Segoe UI Emoji,sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(f.e,0,1);ctx.restore();}
+    function draw(){ctx.clearRect(0,0,W,H);let bg=ctx.createLinearGradient(0,0,0,H);bg.addColorStop(0,'#21133b');bg.addColorStop(.45,'#130d27');bg.addColorStop(1,'#090716');ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);ctx.save();ctx.globalAlpha=.18;for(let y=18;y<H;y+=38){for(let x=18;x<W;x+=38){ctx.fillStyle=(x+y)%76?'#ff5fa8':'#6e63ff';ctx.beginPath();ctx.arc(x,y,1.3,0,7);ctx.fill()}}ctx.restore();ctx.strokeStyle=dangerTime>0?'#ff466d':'rgba(255,100,150,.35)';ctx.setLineDash([8,8]);ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(8,dangerY);ctx.lineTo(W-8,dangerY);ctx.stroke();ctx.setLineDash([]);ctx.strokeStyle='rgba(255,255,255,.14)';ctx.lineWidth=2;ctx.strokeRect(5,3,W-10,H-6);
+      if(!over&&canDrop){const f=fruits[currentLevel];ctx.save();ctx.globalAlpha=.72;ctx.strokeStyle='#fff5';ctx.setLineDash([4,7]);ctx.beginPath();ctx.moveTo(aimX,8);ctx.lineTo(aimX,68);ctx.stroke();ctx.setLineDash([]);fruit3d({x:aimX,y:38,level:currentLevel});ctx.restore();}
+      bodies.slice().sort((a,b)=>a.y-b.y).forEach(fruit3d);
+    }
+    function loop(now){const dt=now-last;last=now;if(!over)physics(dt);draw();raf=requestAnimationFrame(loop)}
+    function pointer(e){const r=c.getBoundingClientRect();aimX=(e.clientX-r.left)*W/r.width;clampAim();}
+    c.addEventListener('pointerdown',pointer);c.addEventListener('pointermove',e=>{if(e.buttons)pointer(e)});c.addEventListener('pointerup',e=>{pointer(e);drop()});
+    stage.querySelector('#fruitLeft').addEventListener('click',()=>{aimX-=38;clampAim();ping(380,.02)});stage.querySelector('#fruitRight').addEventListener('click',()=>{aimX+=38;clampAim();ping(420,.02)});stage.querySelector('#fruitDrop').addEventListener('click',drop);
+    syncPreview();draw();raf=requestAnimationFrame(loop);cleanup=()=>{cancelAnimationFrame(raf);clearTimeout(comboTimer)};
   }
 
   function airHockey(){
