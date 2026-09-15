@@ -1,5 +1,5 @@
 (() => {
-  // SRB Games v13 — compact Air Hockey build.
+  // SRB Games v16 — Fruit Stack + 2048 score highlight.
   const $ = s => document.querySelector(s);
   const home = $('#homeView'), game = $('#gameView'), grid = $('#gameGrid'), stage = $('#gameStage'), hud = $('#gameHud');
   const title = $('#gameTitle'), toast = $('#toast');
