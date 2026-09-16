@@ -264,3 +264,39 @@ body.game-fruitstack .game-stage{padding:8px 4px 12px;background:transparent;bor
 .result-2048 .result-score-big{font-size:58px;line-height:1;font-weight:1000;letter-spacing:-2px;color:#fff;text-shadow:0 5px 22px rgba(255,185,70,.38);font-variant-numeric:tabular-nums}
 .result-2048 .result-best-score{margin-top:5px;padding:6px 12px;border:1px solid #ffffff20;border-radius:999px;background:#ffffff0a;color:#bfb4cf;font-size:10px;font-weight:900;letter-spacing:.8px}
 @media(max-width:390px){.result-2048 .result-score-big{font-size:52px}}
+
+/* v17 Fruit Stack — polished mobile game UI */
+body.game-fruitstack .app-shell{padding-left:12px;padding-right:12px}
+body.game-fruitstack .game-stage{margin-top:10px;padding:12px!important;background:linear-gradient(180deg,#171026,#0b0812)!important;border:1px solid rgba(255,255,255,.09)!important;border-radius:26px!important;box-shadow:0 20px 45px rgba(0,0,0,.42),inset 0 1px rgba(255,255,255,.08)!important;overflow:hidden!important}
+body.game-fruitstack #gameHud{padding:0}
+body.game-fruitstack .fruit-game-shell{width:100%;max-width:420px;margin:0 auto}
+body.game-fruitstack .fruit-hud{display:grid!important;grid-template-columns:1fr 78px 1fr!important;gap:8px!important;margin:0 0 10px!important}
+body.game-fruitstack .fruit-hud>div{min-height:58px!important;padding:9px 12px!important;border-radius:18px!important;background:linear-gradient(160deg,#241934,#120d1c)!important;border:1px solid rgba(255,255,255,.11)!important;box-shadow:inset 0 1px rgba(255,255,255,.12),0 8px 20px rgba(0,0,0,.24)!important}
+body.game-fruitstack .fruit-hud span{font-size:8px!important;letter-spacing:1.5px!important;color:#a99db9!important;font-weight:900!important}
+body.game-fruitstack .fruit-hud strong{font-size:22px!important;line-height:1!important;margin-top:4px}
+body.game-fruitstack .fruit-hud>div:last-child{text-align:right}
+body.game-fruitstack .fruit-hud .fruit-next{display:flex!important;align-items:center!important;text-align:center!important;background:linear-gradient(160deg,#44205a,#20122e)!important;border-color:rgba(255,100,202,.22)!important}
+body.game-fruitstack .fruit-next b{font-size:30px!important;line-height:30px!important;filter:drop-shadow(0 6px 5px #0008)}
+body.game-fruitstack .fruit-title-row{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;padding:3px 3px 11px!important}
+body.game-fruitstack .fruit-title-copy{min-width:0;display:flex!important;flex-direction:column!important;align-items:flex-start!important}
+body.game-fruitstack .fruit-title-copy span{font-size:9px!important;line-height:1!important;color:#ff6fbd!important;font-weight:1000!important;letter-spacing:1.8px!important}
+body.game-fruitstack .fruit-title-copy strong{font-size:18px!important;line-height:1.15!important;margin-top:5px!important;letter-spacing:-.25px}
+body.game-fruitstack .fruit-title-copy small{font-size:9px;color:#9389a6;margin-top:3px;font-weight:700;white-space:nowrap}
+body.game-fruitstack .fruit-combo{flex:0 0 auto;min-width:64px;text-align:center;padding:8px 10px!important;border-radius:12px!important;background:linear-gradient(145deg,#2b2039,#17101f)!important;border:1px solid rgba(255,216,77,.18)!important;color:#ffd84d!important;font-size:9px!important;font-weight:1000!important;letter-spacing:.8px!important;box-shadow:inset 0 1px rgba(255,255,255,.1)}
+body.game-fruitstack .fruit-canvas-wrap{position:relative!important;padding:3px!important;border-radius:24px!important;background:linear-gradient(145deg,#ff55ae,#8b5cf6 48%,#38bdf8)!important;box-shadow:0 15px 35px rgba(0,0,0,.5),0 0 30px rgba(139,92,246,.18)!important;overflow:hidden}
+body.game-fruitstack .fruit-canvas{display:block!important;width:100%!important;height:auto!important;aspect-ratio:360/500!important;border-radius:21px!important;background:#0d0918!important;touch-action:none!important;overscroll-behavior:contain!important}
+body.game-fruitstack .fruit-danger-label{position:absolute!important;top:76px!important;right:10px!important;display:flex!important;align-items:center!important;gap:5px!important;padding:5px 8px!important;border-radius:999px!important;background:rgba(19,7,22,.82)!important;border:1px solid rgba(255,82,119,.2)!important;color:#ff698c!important;font-size:7px!important;font-weight:1000!important;letter-spacing:1.1px!important;backdrop-filter:blur(8px);pointer-events:none}
+body.game-fruitstack .fruit-danger-label i{width:5px;height:5px;border-radius:50%;background:#ff5477;box-shadow:0 0 8px #ff5477}
+body.game-fruitstack .fruit-controls{display:grid!important;grid-template-columns:64px minmax(0,1fr) 64px!important;gap:9px!important;margin-top:11px!important}
+body.game-fruitstack .fruit-controls button{height:62px!important;border-radius:19px!important;border:1px solid rgba(255,255,255,.15)!important;color:#fff!important;cursor:pointer!important;transition:transform .12s ease,filter .12s ease!important}
+body.game-fruitstack .fruit-controls button:active{transform:scale(.95)!important;filter:brightness(1.15)}
+body.game-fruitstack .fruit-move{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:0!important;background:linear-gradient(160deg,#302342,#171020)!important;box-shadow:inset 0 1px rgba(255,255,255,.16),inset 0 -8px 14px rgba(0,0,0,.2),0 8px 18px rgba(0,0,0,.35)!important}
+body.game-fruitstack .fruit-move>span{font-size:34px!important;line-height:28px!important;font-weight:700!important;background:linear-gradient(#fff,#c9b8ff);-webkit-background-clip:text;color:transparent}
+body.game-fruitstack .fruit-move>small{font-size:7px!important;letter-spacing:1.1px!important;color:#968ba9!important;font-weight:1000!important;margin-top:3px}
+body.game-fruitstack #fruitDrop.fruit-drop-btn{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:8px!important;padding:8px 12px 8px 16px!important;background:linear-gradient(135deg,#ff3f9e 0%,#9b4cff 52%,#398dff 100%)!important;border-color:rgba(255,255,255,.28)!important;box-shadow:inset 0 2px rgba(255,255,255,.34),inset 0 -10px 20px rgba(52,13,109,.25),0 10px 25px rgba(139,76,255,.38)!important}
+body.game-fruitstack #fruitDrop .drop-copy{display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:2px!important}
+body.game-fruitstack #fruitDrop .drop-copy small{font-size:8px!important;line-height:1!important;letter-spacing:1.4px!important;color:rgba(255,255,255,.75)!important;font-weight:900!important}
+body.game-fruitstack #fruitDrop .drop-copy strong{font-size:13px!important;line-height:1.1!important;letter-spacing:.25px!important;color:#fff!important;font-weight:1000!important}
+body.game-fruitstack #fruitDrop b{width:42px;height:42px;flex:0 0 42px;display:grid!important;place-items:center!important;border-radius:14px;background:rgba(16,8,32,.22);border:1px solid rgba(255,255,255,.18);font-size:27px!important;filter:drop-shadow(0 5px 4px #0007)!important;box-shadow:inset 0 1px rgba(255,255,255,.16)}
+body.game-fruitstack .game-help{margin:9px 6px 0!important;font-size:9px!important;line-height:1.4!important;color:#857b97!important;text-align:center!important}
+@media(max-width:390px){body.game-fruitstack .game-stage{padding:10px!important}.fruit-title-copy small{display:none}.fruit-controls{grid-template-columns:58px minmax(0,1fr) 58px!important}.fruit-controls button{height:58px!important}#fruitDrop{padding-left:12px!important}.fruit-hud{grid-template-columns:1fr 72px 1fr!important}}

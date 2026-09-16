@@ -207,12 +207,12 @@
     ];
     hud.innerHTML=`<div class="fruit-hud"><div><span>SCORE</span><strong id="fruitScore">0</strong></div><div class="fruit-next"><span>NEXT</span><b id="fruitNext">🍒</b></div><div><span>BEST</span><strong id="fruitBest">${+(localStorage.getItem('srbFruitBest')||0)}</strong></div></div>`;
     stage.innerHTML=`<div class="fruit-game-shell">
-      <div class="fruit-title-row"><div><span>FRUIT DROP</span><strong>Merge the same fruits!</strong></div><div class="fruit-combo" id="fruitCombo">READY</div></div>
-      <div class="fruit-canvas-wrap"><canvas class="fruit-canvas" width="360" height="570" aria-label="Fruit Stack game"></canvas><div class="fruit-danger-label">DANGER LINE</div></div>
-      <div class="fruit-controls"><button type="button" id="fruitLeft" aria-label="Move left">‹</button><button type="button" id="fruitDrop"><span>DROP</span><b id="fruitDropIcon">🍒</b></button><button type="button" id="fruitRight" aria-label="Move right">›</button></div>
+      <div class="fruit-title-row"><div class="fruit-title-copy"><span>FRUIT STACK</span><strong>Drop • Merge • Grow</strong><small>Match identical fruits to evolve them</small></div><div class="fruit-combo" id="fruitCombo">READY</div></div>
+      <div class="fruit-canvas-wrap"><canvas class="fruit-canvas" width="360" height="500" aria-label="Fruit Stack game"></canvas><div class="fruit-danger-label"><i></i>DANGER</div></div>
+      <div class="fruit-controls"><button type="button" id="fruitLeft" class="fruit-move" aria-label="Move left"><span>‹</span><small>LEFT</small></button><button type="button" id="fruitDrop" class="fruit-drop-btn"><span class="drop-copy"><small>DROP FRUIT</small><strong>TAP TO DROP</strong></span><b id="fruitDropIcon">🍒</b></button><button type="button" id="fruitRight" class="fruit-move" aria-label="Move right"><span>›</span><small>RIGHT</small></button></div>
       <p class="game-help">Drag across the box or use arrows • tap DROP to release • matching fruits merge</p>
     </div>`;
-    const c=stage.querySelector('canvas'),ctx=c.getContext('2d'),W=c.width,H=c.height,dangerY=92;
+    const c=stage.querySelector('canvas'),ctx=c.getContext('2d'),W=c.width,H=c.height,dangerY=78;
     const scoreEl=stage.querySelector('#fruitScore'),bestEl=stage.querySelector('#fruitBest'),nextEl=stage.querySelector('#fruitNext'),dropIcon=stage.querySelector('#fruitDropIcon'),comboEl=stage.querySelector('#fruitCombo');
     let bodies=[],score=0,best=+(localStorage.getItem('srbFruitBest')||0),aimX=W/2,currentLevel=randomLevel(),nextLevel=randomLevel(),canDrop=true,over=false,raf=0,last=performance.now(),dangerTime=0,comboTimer=0;
     function randomLevel(){const x=Math.random();return x<.48?0:x<.78?1:2;}
