@@ -1,4 +1,4 @@
-const CACHE='srb-games-v20';
+const CACHE='srb-games-v21';
 const ASSETS=['./','./index.html','./style.css?v=17','./app.js?v=17','./manifest.json','./icons/icon-192.png','./icons/icon-512.png'];
 
 self.addEventListener('install',event=>{
