@@ -1,5 +1,5 @@
 (() => {
-  // SRB Games v19 — premium Fruit Stack + 2048 current-score result.
+  // SRB Games v22 — isolated approved Fruit Stack UI + 2048 current-score result.
   const $ = s => document.querySelector(s);
   const home = $('#homeView'), game = $('#gameView'), grid = $('#gameGrid'), stage = $('#gameStage'), hud = $('#gameHud');
   const title = $('#gameTitle'), toast = $('#toast');
@@ -204,15 +204,23 @@
   }
 
   function fruitStack(){
-  hud.innerHTML=`<div class="fruit-hud"><div><small>SCORE</small><strong id="fruitScore">0</strong></div><div class="fruit-next"><small>NEXT</small><span id="fruitNext">🍒</span></div><div><small>BEST</small><strong id="fruitBest">0</strong></div></div>`;
-  stage.innerHTML=`<div class="fruit-lab">
-    <div class="fruit-evolution"><small>FRUIT EVOLUTION</small><div>🍒 <i>›</i> 🍓 <i>›</i> 🍇 <i>›</i> 🍊 <i>›</i> 🍎 <i>›</i> 🍑 <i>›</i> 🍍 <i>›</i> 🍉</div></div>
-    <div class="fruit-arena-wrap"><canvas class="fruit-canvas" width="360" height="560"></canvas><div class="fruit-danger"><span></span> STACK LIMIT</div></div>
-    <div class="fruit-controls"><button type="button" id="fruitLeft" class="fruit-move">◀</button><button type="button" id="fruitDrop" class="fruit-drop"><span id="fruitDropIcon">🍒</span><b>DROP</b></button><button type="button" id="fruitRight" class="fruit-move">▶</button></div>
-    <p class="fruit-tip">Drag across the arena to aim • tap arena or DROP to release</p>
+  // v22: isolated Fruit Stack component. All visual classes use fsx-* so main game CSS cannot alter it.
+  hud.innerHTML='';
+  stage.innerHTML=`<div class="fsx-app">
+    <section class="fsx-hud">
+      <div><small>SCORE</small><strong id="fruitScore">0</strong></div>
+      <div class="fsx-next"><small>NEXT</small><span id="fruitNext">🍒</span></div>
+      <div><small>BEST</small><strong id="fruitBest">0</strong></div>
+    </section>
+    <section class="fsx-evolution"><small>FRUIT EVOLUTION</small><div>🍒 <i>›</i> 🍓 <i>›</i> 🍇 <i>›</i> 🍊 <i>›</i> 🍎 <i>›</i> 🍑 <i>›</i> 🍍 <i>›</i> 🍉</div></section>
+    <div class="fsx-arena-wrap">
+      <canvas class="fsx-canvas" width="360" height="560"></canvas>
+      <div class="fsx-danger"><span></span> STACK LIMIT</div>
+      <div class="fsx-overlay" id="fruitGameOver" hidden><span>🍉</span><h2>Stack Full!</h2><p>Your score</p><strong id="fruitFinalScore">0</strong><button id="fruitAgain">PLAY AGAIN</button></div>
+    </div>
+    <section class="fsx-controls"><button type="button" id="fruitLeft" class="fsx-move">◀</button><button type="button" id="fruitDrop" class="fsx-drop"><span id="fruitDropIcon">🍒</span><b>DROP</b></button><button type="button" id="fruitRight" class="fsx-move">▶</button></section>
+    <p class="fsx-tip">Drag across the arena to aim • tap arena or DROP to release</p>
   </div>`;
-  const canvas=stage.querySelector('.fruit-canvas'),ctx=canvas.getContext('2d');
-  const scoreEl=hud.querySelector('#fruitScore'),bestEl=hud.querySelector('#fruitBest'),nextEl=hud.querySelector('#fruitNext'),dropFruit=stage.querySelector('#fruitDropIcon');
   const fruits=[
     {e:'🍒',r:18,p:2},{e:'🍓',r:23,p:4},{e:'🍇',r:28,p:8},{e:'🍊',r:34,p:16},
     {e:'🍎',r:40,p:32},{e:'🍑',r:47,p:64},{e:'🍍',r:55,p:128},{e:'🍉',r:65,p:256}
@@ -254,7 +262,7 @@
     ctx.save();ctx.setLineDash([5,7]);ctx.strokeStyle='#ff547a88';ctx.beginPath();ctx.moveTo(13,82);ctx.lineTo(W-13,82);ctx.stroke();ctx.restore();
     const f=fruits[next];ctx.globalAlpha=.18;ctx.strokeStyle='#fff';ctx.beginPath();ctx.moveTo(aim,8);ctx.lineTo(aim,55);ctx.stroke();ctx.globalAlpha=.32;ctx.font=`${f.r*1.25}px "Apple Color Emoji","Segoe UI Emoji"`;ctx.textAlign='center';ctx.fillText(f.e,aim,35);ctx.globalAlpha=1;bodies.sort((a,b)=>a.y-b.y).forEach(fruit3D);
   }
-  function finish(){if(!running)return;running=false;stats.played++;save();showResult('🍉','Stack Full!',`<span class="result-score-big">${score}</span><span class="result-score-label">CURRENT GAME SCORE</span><span class="result-best-pill">BEST ${best}</span>`)}
+  function finish(){if(!running)return;running=false;const final=stage.querySelector('#fruitFinalScore'),overlay=stage.querySelector('#fruitGameOver');if(final)final.textContent=score;if(overlay)overlay.hidden=false;ping(540,.1)}
   function loop(now){let dt=now-last;last=now;if(running)physics(dt);draw();raf=requestAnimationFrame(loop)}
   function pos(e){const r=canvas.getBoundingClientRect();return (e.clientX-r.left)*canvas.width/r.width}
   function down(e){clampAim(pos(e))}
@@ -262,6 +270,7 @@
   function up(e){clampAim(pos(e));drop()}
   canvas.addEventListener('pointerdown',down);canvas.addEventListener('pointermove',move);canvas.addEventListener('pointerup',up);
   stage.querySelector('#fruitLeft').onclick=()=>clampAim(aim-32);stage.querySelector('#fruitRight').onclick=()=>clampAim(aim+32);stage.querySelector('#fruitDrop').onclick=drop;
+  stage.querySelector('#fruitAgain').onclick=()=>startGame();
   sync();raf=requestAnimationFrame(loop);
   cleanup=()=>{running=false;cancelAnimationFrame(raf);canvas.removeEventListener('pointerdown',down);canvas.removeEventListener('pointermove',move);canvas.removeEventListener('pointerup',up)};
 }
