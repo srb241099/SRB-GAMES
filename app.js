@@ -311,6 +311,6 @@
     const updateBar=$('#updateBar'),updateNowBtn=$('#updateNowBtn');let refreshing=false,waitingWorker=null;const showUpdate=worker=>{waitingWorker=worker;updateBar.hidden=false;document.body.classList.add('update-ready');};
     updateNowBtn?.addEventListener('click',()=>{trackEvent('pwa_update_click');if(waitingWorker)waitingWorker.postMessage({type:'SKIP_WAITING'});});
     navigator.serviceWorker.addEventListener('controllerchange',()=>{if(refreshing)return;refreshing=true;window.location.reload();});
-    window.addEventListener('load',async()=>{try{const reg=await navigator.serviceWorker.register('./service-worker.js');if(reg.waiting&&navigator.serviceWorker.controller)showUpdate(reg.waiting);reg.addEventListener('updatefound',()=>{const worker=reg.installing;if(!worker)return;worker.addEventListener('statechange',()=>{if(worker.state==='installed'&&navigator.serviceWorker.controller)showUpdate(worker);});});setInterval(()=>reg.update().catch(()=>{}),30*60*1000);}catch(e){}});
+    window.addEventListener('load',async()=>{try{const reg=await navigator.serviceWorker.register('./service-worker.js?v=23',{updateViaCache:'none'});if(reg.waiting&&navigator.serviceWorker.controller)showUpdate(reg.waiting);reg.addEventListener('updatefound',()=>{const worker=reg.installing;if(!worker)return;worker.addEventListener('statechange',()=>{if(worker.state==='installed'&&navigator.serviceWorker.controller)showUpdate(worker);});});setInterval(()=>reg.update().catch(()=>{}),30*60*1000);}catch(e){}});
   }
 })();
