@@ -225,6 +225,12 @@
     {e:'🍒',r:18,p:2},{e:'🍓',r:23,p:4},{e:'🍇',r:28,p:8},{e:'🍊',r:34,p:16},
     {e:'🍎',r:40,p:32},{e:'🍑',r:47,p:64},{e:'🍍',r:55,p:128},{e:'🍉',r:65,p:256}
   ];
+  const canvas=stage.querySelector('.fsx-canvas');
+  const ctx=canvas.getContext('2d');
+  const scoreEl=stage.querySelector('#fruitScore');
+  const bestEl=stage.querySelector('#fruitBest');
+  const nextEl=stage.querySelector('#fruitNext');
+  const dropFruit=stage.querySelector('#fruitDropIcon');
   let bodies=[],score=0,best=+(localStorage.fruitStackBest||0),next=randSmall(),aim=180,running=true,raf=0,last=performance.now(),dangerSince=0;
   function randSmall(){return Math.floor(Math.random()*4)}
   function sync(){scoreEl.textContent=score;bestEl.textContent=best;nextEl.textContent=fruits[next].e;dropFruit.textContent=fruits[next].e}
