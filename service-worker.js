@@ -1,5 +1,5 @@
-const CACHE='srb-games-v26';
-const CORE=['./','./index.html','./style.css?v=26','./app.js?v=26','./manifest.json','./icons/icon-192.png','./icons/icon-512.png'];
+const CACHE='srb-games-v27';
+const CORE=['./','./index.html','./style.css?v=27','./app.js?v=27','./manifest.json','./icons/icon-192.png','./icons/icon-512.png'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE))));
 self.addEventListener('message',event=>{if(event.data&&event.data.type==='SKIP_WAITING')self.skipWaiting();});
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));

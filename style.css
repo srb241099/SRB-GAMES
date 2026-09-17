@@ -403,3 +403,10 @@ body.game-fruitstack #fruitNext{font-size:31px!important;line-height:1!important
 #gameStage[data-game="fruitstack"] .fsx-overlay[hidden]{display:none!important}
 #gameStage[data-game="fruitstack"] .fsx-overlay>span{font-size:64px!important}#gameStage[data-game="fruitstack"] .fsx-overlay h2{font-size:30px!important;margin:10px 0 2px!important}#gameStage[data-game="fruitstack"] .fsx-overlay p{margin:0!important;color:#a397ae!important;font-size:11px!important;font-weight:800!important}#gameStage[data-game="fruitstack"] .fsx-overlay strong{font-size:48px!important;margin:3px 0 17px!important}#gameStage[data-game="fruitstack"] .fsx-overlay button{border:0!important;border-radius:17px!important;padding:15px 25px!important;color:#fff!important;font-weight:900!important;background:linear-gradient(135deg,#ff4eb9,#8147ff)!important;box-shadow:0 10px 30px #9d42ff55!important}
 @media(max-height:750px){#gameStage[data-game="fruitstack"] .fsx-evolution{display:none!important}#gameStage[data-game="fruitstack"] .fsx-hud>div{height:56px!important;min-height:56px!important}#gameStage[data-game="fruitstack"] .fsx-canvas{max-height:55vh!important}}
+
+
+/* v27 UX: animated Tic-Tac-Toe win line + larger RPS round toast */
+.ttt-board{position:relative;overflow:visible}
+.ttt-win-line{position:absolute;z-index:8;height:8px;border-radius:999px;transform-origin:0 50%;pointer-events:none;background:linear-gradient(90deg,#ff4fc8,#ffffff,#54ddff);box-shadow:0 0 10px #ff4fc8,0 0 22px #54ddff;transition:transform .8s cubic-bezier(.2,.85,.2,1)}
+.ttt-win-line.drawn{transform:rotate(var(--line-angle,0deg)) scaleX(1)}
+body.game-rps .toast{z-index:13000;bottom:34px;max-width:min(90vw,430px);padding:16px 20px;border-radius:20px;font-size:16px;line-height:1.25;font-weight:950;text-align:center;background:linear-gradient(135deg,#39205d,#8b3ff1 55%,#e8449a);border:1px solid #ffffff45;box-shadow:0 16px 45px #000b,inset 0 1px #ffffff55}

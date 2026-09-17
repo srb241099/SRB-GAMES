@@ -1,5 +1,5 @@
 (() => {
-  // SRB Games v24 — isolated approved Fruit Stack UI + 2048 current-score result.
+  // SRB Games v27 — isolated approved Fruit Stack UI + 2048 current-score result.
   const $ = s => document.querySelector(s);
   const home = $('#homeView'), game = $('#gameView'), grid = $('#gameGrid'), stage = $('#gameStage'), hud = $('#gameHud');
   const title = $('#gameTitle'), toast = $('#toast');
@@ -7,7 +7,7 @@
   const turnBanner = $('#turnBanner'), turnBannerText = $('#turnBannerText');
   const resetConfirm = $('#resetConfirm');
   const stats = JSON.parse(localStorage.getItem('srbStats') || '{"played":0,"wins":0,"best2048":0,"snake":0}');
-  let current = null, cleanup = () => {}, sound = true, gameFilter = 'solo', turnTimer = 0;
+  let current = null, cleanup = () => {}, sound = true, gameFilter = 'solo', turnTimer = 0, resultTimer = 0;
 
   const games = [
     {id:'ttt',name:'Tic Tac Toe',desc:'Classic 3×3 duel',emoji:'✕◯',mode:'2 PLAYERS',art:'ttt',type:'multi'},
@@ -41,6 +41,9 @@
   }
   function hideResult(){ resultLayer.hidden=true; }
   function showGameResult(main,sub='',icon='🏆',opts={}){
+    clearTimeout(resultTimer);
+    const delay=opts.delay ?? 2500;
+    resultTimer=setTimeout(()=>{
     resultTitle.textContent=main; resultText.textContent=sub; resultIcon.textContent=icon;
     resultLayer.classList.toggle('result-2048', opts.variant==='2048');
     if(opts.variant==='2048'){
@@ -52,9 +55,10 @@
       resultIcon.removeAttribute('aria-label');
     }
     resultLayer.hidden=false; ping(icon==='🏆'?820:540,.1);
+    },delay);
   }
   $('#gameResultAction').addEventListener('click',()=>{hideResult();startGame();});
-  $('#gameResultHome').addEventListener('click',()=>{hideResult(); if(current) history.back(); else goHome(false);});
+  $('#gameResultHome').addEventListener('click',()=>{hideResult(); if(current) goHome(true); else goHome(false);});
 
   function clearGameClasses(){ [...document.body.classList].filter(c=>c.startsWith('game-')).forEach(c=>document.body.classList.remove(c)); }
   function renderHome(){
@@ -74,8 +78,8 @@
     home.classList.remove('active');game.classList.add('active');document.body.classList.add('playing');clearGameClasses();document.body.classList.add(`game-${id}`);stage.dataset.game=id;ping(520,.06);startGame();
     if(push) history.pushState({srbView:'game',game:id},'',location.pathname+location.search+`#${id}`);
   }
-  function goHome(updateHistory=false){ cleanup();hideResult();clearTimeout(turnTimer);turnBanner.hidden=true;game.classList.remove('active');home.classList.add('active');current=null;stage.innerHTML='';hud.innerHTML='';document.body.classList.remove('playing');clearGameClasses();delete stage.dataset.game;if(updateHistory)history.replaceState({srbView:'home'},'',location.pathname+location.search); }
-  function startGame(){ cleanup(); cleanup=()=>{}; hideResult(); stage.innerHTML='';hud.innerHTML=''; if(current==='ttt') ticTacToe(); if(current==='c4') connect4(); if(current==='dots') dotsBoxes(); if(current==='sos') sosGame(); if(current==='g2048') game2048(); if(current==='snake') snakeGame(); if(current==='fruitstack') fruitStack(); if(current==='memory') memoryMatch(false); if(current==='memory2') memoryMatch(true); if(current==='rps') rpsGame(); if(current==='hockey') airHockey(); }
+  function goHome(updateHistory=false){ clearTimeout(resultTimer);cleanup();hideResult();clearTimeout(turnTimer);turnBanner.hidden=true;game.classList.remove('active');home.classList.add('active');current=null;stage.innerHTML='';hud.innerHTML='';document.body.classList.remove('playing');clearGameClasses();delete stage.dataset.game;if(updateHistory)history.replaceState({srbView:'home'},'',location.pathname+location.search); }
+  function startGame(){ clearTimeout(resultTimer);cleanup(); cleanup=()=>{}; hideResult(); stage.innerHTML='';hud.innerHTML=''; if(current==='ttt') ticTacToe(); if(current==='c4') connect4(); if(current==='dots') dotsBoxes(); if(current==='sos') sosGame(); if(current==='g2048') game2048(); if(current==='snake') snakeGame(); if(current==='fruitstack') fruitStack(); if(current==='memory') memoryMatch(false); if(current==='memory2') memoryMatch(true); if(current==='rps') rpsGame(); if(current==='hockey') airHockey(); }
 
   history.replaceState({srbView:'home'},'',location.pathname+location.search);
   window.addEventListener('popstate',e=>{
@@ -83,7 +87,7 @@
     if(st?.srbView==='game'&&st.game){ if(current!==st.game) openGame(st.game,false); }
     else goHome(false);
   });
-  $('#backBtn').addEventListener('click',()=>{ if(current) history.back(); });
+  $('#backBtn').addEventListener('click',()=>{ if(current) goHome(true); });
   $('#restartBtn').addEventListener('click',()=>{ if(!current)return; resetConfirm.hidden=false; });
   $('#cancelReset').addEventListener('click',()=>resetConfirm.hidden=true);
   $('#confirmReset').addEventListener('click',()=>{resetConfirm.hidden=true;trackEvent('game_reset',{game_name:current});startGame();});
@@ -95,7 +99,8 @@
   function ticTacToe(){
     let b=Array(9).fill(''),turn='X',done=false; const wins=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
     function draw(){hud2(turn==='X'?'YOUR TURN':'X',turn==='O'?'YOUR TURN':'O',turn==='X'?1:2);stage.innerHTML=`<div class="board ttt-board">${b.map((v,i)=>`<button class="cell ${v==='X'?'mark-x':v==='O'?'mark-o':''}" data-i="${i}">${v}</button>`).join('')}</div><p class="game-help">Take turns on the same device • First line of 3 wins</p>`;stage.querySelectorAll('.cell').forEach(c=>c.addEventListener('click',()=>move(+c.dataset.i)));}
-    function move(i){if(done||b[i])return;b[i]=turn;ping(turn==='X'?520:680);const w=wins.find(a=>a.every(k=>b[k]===turn));if(w){done=true;draw();w.forEach(i=>stage.children[0].children[i].classList.add('win-cell'));stats.wins++;save();showGameResult(`PLAYER ${turn==='X'?'A':'B'} WINS!`,'Three in a row.','🏆');return;}if(b.every(Boolean)){done=true;draw();showGameResult('DRAW GAME','Perfectly matched.','🤝');return;}turn=turn==='X'?'O':'X';draw();}
+    function drawTttWinLine(w){const board=stage.querySelector('.ttt-board'),cells=[...board.querySelectorAll('.cell')],a=cells[w[0]],z=cells[w[2]];if(!a||!z)return;const br=board.getBoundingClientRect(),ar=a.getBoundingClientRect(),zr=z.getBoundingClientRect();const x1=ar.left+ar.width/2-br.left,y1=ar.top+ar.height/2-br.top,x2=zr.left+zr.width/2-br.left,y2=zr.top+zr.height/2-br.top,len=Math.hypot(x2-x1,y2-y1),ang=Math.atan2(y2-y1,x2-x1)*180/Math.PI;const line=document.createElement('i');line.className='ttt-win-line';line.style.cssText=`left:${x1}px;top:${y1}px;width:${len}px;--line-angle:${ang}deg;transform:rotate(${ang}deg) scaleX(0)`;board.appendChild(line);requestAnimationFrame(()=>requestAnimationFrame(()=>line.classList.add('drawn')));}
+    function move(i){if(done||b[i])return;b[i]=turn;ping(turn==='X'?520:680);const w=wins.find(a=>a.every(k=>b[k]===turn));if(w){done=true;draw();w.forEach(i=>stage.children[0].children[i].classList.add('win-cell'));drawTttWinLine(w);stats.wins++;save();showGameResult(`PLAYER ${turn==='X'?'A':'B'} WINS!`,'Three in a row.','🏆');return;}if(b.every(Boolean)){done=true;draw();showGameResult('DRAW GAME','Perfectly matched.','🤝');return;}turn=turn==='X'?'O':'X';draw();}
     draw();
   }
 
@@ -198,7 +203,7 @@
     function draw(){hud2(`${score[1]} WINS`,`${score[2]} WINS`,phase===1?1:2);let body='';if(done){body=`<div class="rps-result"><div class="rps-big">🏆</div><h3>Match complete</h3></div>`;}else if(phase===1){body=`<div class="rps-secret"><span class="round-pill">ROUND ${round}</span><h3>Player A — pick secretly</h3><div class="rps-choices">${choices.map(([v,e])=>`<button data-rps="${v}">${e}<small>${v}</small></button>`).join('')}</div></div>`;}else if(phase===2){body=`<div class="rps-pass"><div class="pass-icon">📱</div><h3>Pass phone to Player B</h3><p>Player A's choice is hidden.</p><button class="primary-game-btn" id="rpsReady">PLAYER B READY</button></div>`;}else{body=`<div class="rps-secret"><span class="round-pill">ROUND ${round}</span><h3>Player B — choose</h3><div class="rps-choices">${choices.map(([v,e])=>`<button data-rps2="${v}">${e}<small>${v}</small></button>`).join('')}</div></div>`;}stage.innerHTML=`<div class="rps-format"><span>BEST OF</span><button data-best="3" class="mini-chip ${target===2?'active':''}">3</button><button data-best="5" class="mini-chip ${target===3?'active':''}">5</button></div>${body}`;
       stage.querySelectorAll('[data-best]').forEach(b=>b.addEventListener('click',()=>{target=+b.dataset.best===3?2:3;score=[0,0,0];round=1;p1=null;phase=1;done=false;draw();}));
       stage.querySelectorAll('[data-rps]').forEach(b=>b.addEventListener('click',()=>{p1=b.dataset.rps;phase=2;ping(500);draw();}));stage.querySelector('#rpsReady')?.addEventListener('click',()=>{phase=3;draw();});
-      stage.querySelectorAll('[data-rps2]').forEach(b=>b.addEventListener('click',()=>{let p2=b.dataset.rps2,w=result(p1,p2);if(w)score[w]++;const em=x=>choices.find(c=>c[0]===x)[1];if(score[1]>=target||score[2]>=target){done=true;stats.wins++;save();draw();setTimeout(()=>showGameResult(`PLAYER ${w===1?'A':'B'} WINS!`,`${em(p1)} vs ${em(p2)} • ${score[1]} – ${score[2]}`,'🏆'),120);}else{showToast(w?`${em(p1)} vs ${em(p2)} • Player ${w===1?'A':'B'} wins round`:`${em(p1)} vs ${em(p2)} • Draw`);round++;phase=1;p1=null;draw();}}));
+      stage.querySelectorAll('[data-rps2]').forEach(b=>b.addEventListener('click',()=>{let p2=b.dataset.rps2,w=result(p1,p2);if(w)score[w]++;const em=x=>choices.find(c=>c[0]===x)[1];if(score[1]>=target||score[2]>=target){done=true;stats.wins++;save();draw();showGameResult(`PLAYER ${w===1?'A':'B'} WINS!`,`${em(p1)} vs ${em(p2)} • ${score[1]} – ${score[2]}`,'🏆');}else{showToast(w?`${em(p1)} vs ${em(p2)} • Player ${w===1?'A':'B'} wins round`:`${em(p1)} vs ${em(p2)} • Draw`);round++;phase=1;p1=null;draw();}}));
     }
     draw();
   }
@@ -268,7 +273,7 @@
     ctx.save();ctx.setLineDash([5,7]);ctx.strokeStyle='#ff547a88';ctx.beginPath();ctx.moveTo(13,82);ctx.lineTo(W-13,82);ctx.stroke();ctx.restore();
     const f=fruits[next];ctx.globalAlpha=.18;ctx.strokeStyle='#fff';ctx.beginPath();ctx.moveTo(aim,8);ctx.lineTo(aim,55);ctx.stroke();ctx.globalAlpha=.32;ctx.font=`${f.r*1.25}px "Apple Color Emoji","Segoe UI Emoji"`;ctx.textAlign='center';ctx.fillText(f.e,aim,35);ctx.globalAlpha=1;bodies.sort((a,b)=>a.y-b.y).forEach(fruit3D);
   }
-  function finish(){if(!running)return;running=false;const final=stage.querySelector('#fruitFinalScore'),overlay=stage.querySelector('#fruitGameOver');if(final)final.textContent=score;if(overlay)overlay.hidden=false;ping(540,.1)}
+  function finish(){if(!running)return;running=false;clearTimeout(resultTimer);resultTimer=setTimeout(()=>{const final=stage.querySelector('#fruitFinalScore'),overlay=stage.querySelector('#fruitGameOver');if(final)final.textContent=score;if(overlay)overlay.hidden=false;ping(540,.1)},2500)}
   function loop(now){let dt=now-last;last=now;if(running)physics(dt);draw();raf=requestAnimationFrame(loop)}
   function pos(e){const r=canvas.getBoundingClientRect();return (e.clientX-r.left)*canvas.width/r.width}
   function down(e){clampAim(pos(e))}
@@ -295,7 +300,7 @@
     function hit(p){let dx=puck.x-p.x,dy=puck.y-p.y,d=Math.hypot(dx,dy),min=p.r+puck.r;if(d<min&&d>0){let nx=dx/d,ny=dy/d,s=Math.max(4.3,Math.hypot(puck.vx,puck.vy)*1.03);puck.x=p.x+nx*(min+1);puck.y=p.y+ny*(min+1);puck.vx=nx*s;puck.vy=ny*s;ping(540,.025);}}
     function update(){if(!running)return;puck.x+=puck.vx;puck.y+=puck.vy;if(puck.x-puck.r<8){puck.x=8+puck.r;puck.vx=Math.abs(puck.vx)}if(puck.x+puck.r>W-8){puck.x=W-8-puck.r;puck.vx=-Math.abs(puck.vx)}hit(p1);hit(p2);
       const goalL=W*.31,goalR=W*.69;if(puck.y<-puck.r){if(puck.x>goalL&&puck.x<goalR){score[1]++;goal(1)}else{puck.y=puck.r;puck.vy=Math.abs(puck.vy)}}if(puck.y>H+puck.r){if(puck.x>goalL&&puck.x<goalR){score[2]++;goal(2)}else{puck.y=H-puck.r;puck.vy=-Math.abs(puck.vy)}}}
-    function goal(w){ping(820,.12);hud2(`${score[1]} goals`,`${score[2]} goals`,w);if(score[w]>=5){running=false;stats.wins++;save();showToast(`Player ${w} wins Air Hockey! 🏆`);stage.querySelector('.hockey-overlay').classList.remove('hidden');stage.querySelector('#hockeyStart').textContent='REMATCH';return;}showToast(`GOAL • Player ${w}`);resetPuck(w===1?1:-1);}
+    function goal(w){ping(820,.12);hud2(`${score[1]} goals`,`${score[2]} goals`,w);if(score[w]>=5){running=false;stats.wins++;save();showGameResult(`PLAYER ${w===1?'A':'B'} WINS!`,`${score[1]} – ${score[2]} goals`,'🏆');return;}showToast(`GOAL • Player ${w}`);resetPuck(w===1?1:-1);}
     function circle(x,y,r,fill,glow){ctx.save();ctx.shadowColor=glow;ctx.shadowBlur=18;ctx.fillStyle=fill;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();ctx.restore();}
     function draw(){ctx.clearRect(0,0,W,H);let g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#102a42');g.addColorStop(.5,'#12102b');g.addColorStop(1,'#35122d');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.strokeStyle='rgba(255,255,255,.18)';ctx.lineWidth=3;ctx.strokeRect(8,8,W-16,H-16);ctx.beginPath();ctx.moveTo(8,H/2);ctx.lineTo(W-8,H/2);ctx.stroke();ctx.beginPath();ctx.arc(W/2,H/2,48,0,Math.PI*2);ctx.stroke();ctx.lineWidth=8;ctx.strokeStyle='#50d9ff';ctx.beginPath();ctx.moveTo(W*.31,8);ctx.lineTo(W*.69,8);ctx.stroke();ctx.strokeStyle='#ff5aa7';ctx.beginPath();ctx.moveTo(W*.31,H-8);ctx.lineTo(W*.69,H-8);ctx.stroke();circle(p2.x,p2.y,p2.r,'#36cdf7','#36cdf7');circle(p1.x,p1.y,p1.r,'#ff4f8b','#ff4f8b');circle(puck.x,puck.y,puck.r,'#f9fbff','#ffffff');}
     function loop(){update();draw();raf=requestAnimationFrame(loop)}
@@ -317,6 +322,6 @@
     const updateBar=$('#updateBar'),updateNowBtn=$('#updateNowBtn');let refreshing=false,waitingWorker=null;const showUpdate=worker=>{waitingWorker=worker;updateBar.hidden=false;document.body.classList.add('update-ready');};
     updateNowBtn?.addEventListener('click',()=>{trackEvent('pwa_update_click');if(waitingWorker)waitingWorker.postMessage({type:'SKIP_WAITING'});});
     navigator.serviceWorker.addEventListener('controllerchange',()=>{if(refreshing)return;refreshing=true;window.location.reload();});
-    window.addEventListener('load',async()=>{try{const reg=await navigator.serviceWorker.register('./service-worker.js?v=24',{updateViaCache:'none'});if(reg.waiting&&navigator.serviceWorker.controller)showUpdate(reg.waiting);reg.addEventListener('updatefound',()=>{const worker=reg.installing;if(!worker)return;worker.addEventListener('statechange',()=>{if(worker.state==='installed'&&navigator.serviceWorker.controller)showUpdate(worker);});});setInterval(()=>reg.update().catch(()=>{}),30*60*1000);}catch(e){}});
+    window.addEventListener('load',async()=>{try{const reg=await navigator.serviceWorker.register('./service-worker.js?v=27',{updateViaCache:'none'});if(reg.waiting&&navigator.serviceWorker.controller)showUpdate(reg.waiting);reg.addEventListener('updatefound',()=>{const worker=reg.installing;if(!worker)return;worker.addEventListener('statechange',()=>{if(worker.state==='installed'&&navigator.serviceWorker.controller)showUpdate(worker);});});setInterval(()=>reg.update().catch(()=>{}),30*60*1000);}catch(e){}});
   }
 })();
