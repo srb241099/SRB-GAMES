@@ -432,3 +432,28 @@ body.game-rps .toast{z-index:13000;bottom:34px;max-width:min(90vw,430px);padding
 .game-result-card h2 .result-player-a{background:linear-gradient(145deg,#ff58c5,#a73dff);box-shadow:0 8px 24px #d845bd55,inset 0 1px #ffffff77}
 .game-result-card h2 .result-player-b{background:linear-gradient(145deg,#43dfff,#3377ff);box-shadow:0 8px 24px #42b9ff55,inset 0 1px #ffffff77}
 @media(max-width:390px){.toast.rps-round{top:20%!important;font-size:26px!important;min-height:116px!important}.game-result-card h2 .result-player{min-width:52px;height:52px;border-radius:16px}}
+\n/* v29 targeted winner UX overrides */
+.toast.rps-round{
+  top:14%!important;bottom:auto!important;left:50%!important;width:min(86vw,360px)!important;min-height:0!important;
+  padding:14px 16px!important;border-radius:22px!important;background:rgba(20,13,34,.96)!important;
+  border:1px solid #ffffff35!important;box-shadow:0 16px 42px #000b,0 0 0 1px #9c5cff33!important;
+  transform:translate(-50%,-10px) scale(.96)!important;font-size:16px!important;display:block!important;text-align:center!important
+}
+.toast.rps-round.show{transform:translate(-50%,0) scale(1)!important}
+.rps-toast-duel{font-size:28px;line-height:1;margin-bottom:9px;letter-spacing:2px}
+.rps-toast-win{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+.rps-toast-win b{font-size:18px;line-height:1;padding:8px 12px;border-radius:12px;background:linear-gradient(135deg,#ff4db8,#7d4dff);color:#fff;box-shadow:0 6px 18px #a844ff55}
+.rps-toast-win span,.rps-toast-draw{font-size:12px;font-weight:900;letter-spacing:1.1px;color:#d8d0e6}
+
+.game-result-card h2.player-win-title{display:flex;align-items:center;justify-content:center;gap:9px;flex-wrap:nowrap;background:none!important;color:#fff!important;-webkit-text-fill-color:initial!important;overflow:visible}
+.game-result-card h2.player-win-title .result-player-prefix,.game-result-card h2.player-win-title .result-player-suffix{font-size:20px!important;line-height:1!important;color:#eee6fa!important;-webkit-text-fill-color:#eee6fa!important;font-weight:900!important;letter-spacing:.2px}
+.game-result-card h2.player-win-title .result-player{width:72px!important;height:72px!important;min-width:72px!important;border-radius:22px!important;font-size:48px!important;line-height:72px!important;margin:0!important;color:#fff!important;-webkit-text-fill-color:#fff!important;transform:translateY(-1px)}
+.game-result-card h2.player-win-a .result-player{background:linear-gradient(145deg,#ff4db8,#8c42ff)!important;box-shadow:0 10px 28px #e344c477,0 0 22px #b94cff55,inset 0 2px #ffffff66!important}
+.game-result-card h2.player-win-b .result-player{background:linear-gradient(145deg,#35dcff,#3c65ff)!important;box-shadow:0 10px 28px #3bbfff77,0 0 22px #3f8cff55,inset 0 2px #ffffff66!important}
+
+.connect-board.c4-has-winner .disc:not(.c4-win-disc){filter:brightness(.42) saturate(.55)!important;opacity:.55!important;transition:.2s}
+.connect-board .c4-win-cell{z-index:8!important;animation:c4CellWinV29 .42s ease-in-out infinite alternate!important}
+.connect-board .c4-win-disc{position:relative;z-index:10;outline:6px solid #fff!important;outline-offset:-2px!important;filter:brightness(1.7) saturate(1.55)!important;box-shadow:0 0 0 5px #fff,0 0 16px 8px #fff,0 0 34px 15px #ffe36d,0 0 60px 24px #ffb300!important;animation:c4DiscWinV29 .42s ease-in-out infinite alternate!important}
+@keyframes c4CellWinV29{from{transform:scale(1)}to{transform:scale(1.10)}}
+@keyframes c4DiscWinV29{from{transform:scale(.94)}to{transform:scale(1.10)}}
+@media(max-width:390px){.game-result-card h2.player-win-title{gap:6px}.game-result-card h2.player-win-title .result-player{width:64px!important;height:64px!important;min-width:64px!important;font-size:43px!important;line-height:64px!important}.game-result-card h2.player-win-title .result-player-prefix,.game-result-card h2.player-win-title .result-player-suffix{font-size:17px!important}.toast.rps-round{top:13%!important;width:min(88vw,340px)!important}}
