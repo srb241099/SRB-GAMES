@@ -1,5 +1,5 @@
 (() => {
-  // SRB Games v27 — isolated approved Fruit Stack UI + 2048 current-score result.
+  // SRB Games v28 — isolated approved Fruit Stack UI + 2048 current-score result.
   const $ = s => document.querySelector(s);
   const home = $('#homeView'), game = $('#gameView'), grid = $('#gameGrid'), stage = $('#gameStage'), hud = $('#gameHud');
   const title = $('#gameTitle'), toast = $('#toast');
@@ -26,7 +26,7 @@
   function save(){ localStorage.setItem('srbStats',JSON.stringify(stats)); updateStats(); }
   function updateStats(){ $('#playedCount').textContent=stats.played; $('#winsCount').textContent=stats.wins; $('#best2048').textContent=stats.best2048; }
   function ping(freq=460,d=.05){ if(!sound) return; try{const a=new (window.AudioContext||window.webkitAudioContext)(),o=a.createOscillator(),g=a.createGain();o.frequency.value=freq;g.gain.setValueAtTime(.035,a.currentTime);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+d);o.connect(g);g.connect(a.destination);o.start();o.stop(a.currentTime+d);}catch(e){} }
-  function showToast(t){ toast.textContent=t;toast.classList.add('show');clearTimeout(showToast.t);showToast.t=setTimeout(()=>toast.classList.remove('show'),1400); }
+  function showToast(t,kind=''){ toast.textContent=t;toast.className=`toast${kind?' '+kind:''}`;void toast.offsetWidth;toast.classList.add('show');clearTimeout(showToast.t);showToast.t=setTimeout(()=>{toast.classList.remove('show');setTimeout(()=>toast.className='toast',260);},kind==='rps-round'?2200:1400); }
   function trackEvent(name,params={}){ try{ if(typeof window.gtag==='function') window.gtag('event',name,params); }catch(e){} }
 
   function showTurn(text){
@@ -44,7 +44,12 @@
     clearTimeout(resultTimer);
     const delay=opts.delay ?? 2500;
     resultTimer=setTimeout(()=>{
-    resultTitle.textContent=main; resultText.textContent=sub; resultIcon.textContent=icon;
+    const pm=String(main).match(/^PLAYER ([AB]) (WINS!|WINS)$/i);
+    if(pm){
+      const letter=pm[1].toUpperCase();
+      resultTitle.innerHTML=`<span class="result-player-prefix">PLAYER</span> <strong class="result-player result-player-${letter.toLowerCase()}">${letter}</strong> <span class="result-player-suffix">WINS!</span>`;
+    }else resultTitle.textContent=main;
+    resultText.textContent=sub; resultIcon.textContent=icon;
     resultLayer.classList.toggle('result-2048', opts.variant==='2048');
     if(opts.variant==='2048'){
       const score=opts.score ?? 0, best=opts.best ?? 0;
@@ -99,7 +104,19 @@
   function ticTacToe(){
     let b=Array(9).fill(''),turn='X',done=false; const wins=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
     function draw(){hud2(turn==='X'?'YOUR TURN':'X',turn==='O'?'YOUR TURN':'O',turn==='X'?1:2);stage.innerHTML=`<div class="board ttt-board">${b.map((v,i)=>`<button class="cell ${v==='X'?'mark-x':v==='O'?'mark-o':''}" data-i="${i}">${v}</button>`).join('')}</div><p class="game-help">Take turns on the same device • First line of 3 wins</p>`;stage.querySelectorAll('.cell').forEach(c=>c.addEventListener('click',()=>move(+c.dataset.i)));}
-    function drawTttWinLine(w){const board=stage.querySelector('.ttt-board'),cells=[...board.querySelectorAll('.cell')],a=cells[w[0]],z=cells[w[2]];if(!a||!z)return;const br=board.getBoundingClientRect(),ar=a.getBoundingClientRect(),zr=z.getBoundingClientRect();const x1=ar.left+ar.width/2-br.left,y1=ar.top+ar.height/2-br.top,x2=zr.left+zr.width/2-br.left,y2=zr.top+zr.height/2-br.top,len=Math.hypot(x2-x1,y2-y1),ang=Math.atan2(y2-y1,x2-x1)*180/Math.PI;const line=document.createElement('i');line.className='ttt-win-line';line.style.cssText=`left:${x1}px;top:${y1}px;width:${len}px;--line-angle:${ang}deg;transform:rotate(${ang}deg) scaleX(0)`;board.appendChild(line);requestAnimationFrame(()=>requestAnimationFrame(()=>line.classList.add('drawn')));}
+    function drawTttWinLine(w){
+      const board=stage.querySelector('.ttt-board'); if(!board)return;
+      const map={
+        '0,1,2':[16.666,16.666,83.333,16.666], '3,4,5':[16.666,50,83.333,50], '6,7,8':[16.666,83.333,83.333,83.333],
+        '0,3,6':[16.666,16.666,16.666,83.333], '1,4,7':[50,16.666,50,83.333], '2,5,8':[83.333,16.666,83.333,83.333],
+        '0,4,8':[16.666,16.666,83.333,83.333], '2,4,6':[83.333,16.666,16.666,83.333]
+      };
+      const q=map[w.join(',')]; if(!q)return;
+      const [x1,y1,x2,y2]=q,dx=x2-x1,dy=y2-y1,len=Math.hypot(dx,dy),ang=Math.atan2(dy,dx)*180/Math.PI;
+      const line=document.createElement('i'); line.className='ttt-win-line';
+      line.style.cssText=`left:${x1}%;top:${y1}%;width:${len}%;--line-angle:${ang}deg`;
+      board.appendChild(line); requestAnimationFrame(()=>requestAnimationFrame(()=>line.classList.add('drawn')));
+    }
     function move(i){if(done||b[i])return;b[i]=turn;ping(turn==='X'?520:680);const w=wins.find(a=>a.every(k=>b[k]===turn));if(w){done=true;draw();w.forEach(i=>stage.children[0].children[i].classList.add('win-cell'));drawTttWinLine(w);stats.wins++;save();showGameResult(`PLAYER ${turn==='X'?'A':'B'} WINS!`,'Three in a row.','🏆');return;}if(b.every(Boolean)){done=true;draw();showGameResult('DRAW GAME','Perfectly matched.','🤝');return;}turn=turn==='X'?'O':'X';draw();}
     draw();
   }
@@ -107,8 +124,9 @@
   function connect4(){
     const rows=6,cols=7,b=Array.from({length:rows},()=>Array(cols).fill(0));let turn=1,done=false;
     function draw(){hud2(turn===1?'YOUR TURN':'RED',turn===2?'YOUR TURN':'GOLD',turn);stage.innerHTML=`<div class="connect-board board">${b.flatMap((r,ri)=>r.map((v,ci)=>`<button class="cell" data-c="${ci}">${v?`<span class="disc p${v}"></span>`:''}</button>`)).join('')}</div><p class="game-help">Tap any column • Connect 4 horizontally, vertically or diagonally</p>`;stage.querySelectorAll('.cell').forEach(c=>c.addEventListener('click',()=>drop(+c.dataset.c)));}
-    function win(r,c,p){for(const [dr,dc] of [[1,0],[0,1],[1,1],[1,-1]]){let n=1;for(const s of [-1,1]){let rr=r+dr*s,cc=c+dc*s;while(rr>=0&&rr<rows&&cc>=0&&cc<cols&&b[rr][cc]===p){n++;rr+=dr*s;cc+=dc*s;}}if(n>=4)return true;}return false;}
-    function drop(c){if(done)return;let r=rows-1;while(r>=0&&b[r][c])r--;if(r<0)return;b[r][c]=turn;ping(turn===1?420:620,.07);if(win(r,c,turn)){done=true;draw();stats.wins++;save();showGameResult(`PLAYER ${turn===1?'A':'B'} WINS!`,'Connected four.','🏆');return;}if(b.flat().every(Boolean)){done=true;draw();showGameResult('DRAW GAME','Board is full.','🤝');return;}turn=turn===1?2:1;draw();}
+    function win(r,c,p){for(const [dr,dc] of [[1,0],[0,1],[1,1],[1,-1]]){let cells=[[r,c]];for(const s of [-1,1]){let rr=r+dr*s,cc=c+dc*s;while(rr>=0&&rr<rows&&cc>=0&&cc<cols&&b[rr][cc]===p){cells.push([rr,cc]);rr+=dr*s;cc+=dc*s;}}if(cells.length>=4)return cells;}return null;}
+    function highlightWin(cells){const board=stage.querySelector('.connect-board');if(!board)return;cells.forEach(([r,c])=>{const cell=board.children[r*cols+c];if(cell){cell.classList.add('c4-win-cell');cell.querySelector('.disc')?.classList.add('c4-win-disc');}});}
+    function drop(c){if(done)return;let r=rows-1;while(r>=0&&b[r][c])r--;if(r<0)return;b[r][c]=turn;ping(turn===1?420:620,.07);const winning=win(r,c,turn);if(winning){done=true;draw();highlightWin(winning);stats.wins++;save();showGameResult(`PLAYER ${turn===1?'A':'B'} WINS!`,'Connected four.','🏆');return;}if(b.flat().every(Boolean)){done=true;draw();showGameResult('DRAW GAME','Board is full.','🤝');return;}turn=turn===1?2:1;draw();}
     draw();
   }
 
@@ -203,7 +221,7 @@
     function draw(){hud2(`${score[1]} WINS`,`${score[2]} WINS`,phase===1?1:2);let body='';if(done){body=`<div class="rps-result"><div class="rps-big">🏆</div><h3>Match complete</h3></div>`;}else if(phase===1){body=`<div class="rps-secret"><span class="round-pill">ROUND ${round}</span><h3>Player A — pick secretly</h3><div class="rps-choices">${choices.map(([v,e])=>`<button data-rps="${v}">${e}<small>${v}</small></button>`).join('')}</div></div>`;}else if(phase===2){body=`<div class="rps-pass"><div class="pass-icon">📱</div><h3>Pass phone to Player B</h3><p>Player A's choice is hidden.</p><button class="primary-game-btn" id="rpsReady">PLAYER B READY</button></div>`;}else{body=`<div class="rps-secret"><span class="round-pill">ROUND ${round}</span><h3>Player B — choose</h3><div class="rps-choices">${choices.map(([v,e])=>`<button data-rps2="${v}">${e}<small>${v}</small></button>`).join('')}</div></div>`;}stage.innerHTML=`<div class="rps-format"><span>BEST OF</span><button data-best="3" class="mini-chip ${target===2?'active':''}">3</button><button data-best="5" class="mini-chip ${target===3?'active':''}">5</button></div>${body}`;
       stage.querySelectorAll('[data-best]').forEach(b=>b.addEventListener('click',()=>{target=+b.dataset.best===3?2:3;score=[0,0,0];round=1;p1=null;phase=1;done=false;draw();}));
       stage.querySelectorAll('[data-rps]').forEach(b=>b.addEventListener('click',()=>{p1=b.dataset.rps;phase=2;ping(500);draw();}));stage.querySelector('#rpsReady')?.addEventListener('click',()=>{phase=3;draw();});
-      stage.querySelectorAll('[data-rps2]').forEach(b=>b.addEventListener('click',()=>{let p2=b.dataset.rps2,w=result(p1,p2);if(w)score[w]++;const em=x=>choices.find(c=>c[0]===x)[1];if(score[1]>=target||score[2]>=target){done=true;stats.wins++;save();draw();showGameResult(`PLAYER ${w===1?'A':'B'} WINS!`,`${em(p1)} vs ${em(p2)} • ${score[1]} – ${score[2]}`,'🏆');}else{showToast(w?`${em(p1)} vs ${em(p2)} • Player ${w===1?'A':'B'} wins round`:`${em(p1)} vs ${em(p2)} • Draw`);round++;phase=1;p1=null;draw();}}));
+      stage.querySelectorAll('[data-rps2]').forEach(b=>b.addEventListener('click',()=>{let p2=b.dataset.rps2,w=result(p1,p2);if(w)score[w]++;const em=x=>choices.find(c=>c[0]===x)[1];if(score[1]>=target||score[2]>=target){done=true;stats.wins++;save();draw();showGameResult(`PLAYER ${w===1?'A':'B'} WINS!`,`${em(p1)} vs ${em(p2)} • ${score[1]} – ${score[2]}`,'🏆');}else{showToast(w?`${em(p1)} vs ${em(p2)}  •  PLAYER ${w===1?'A':'B'} WINS ROUND`:`${em(p1)} vs ${em(p2)}  •  DRAW`,'rps-round');round++;phase=1;p1=null;draw();}}));
     }
     draw();
   }

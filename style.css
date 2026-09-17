@@ -410,3 +410,25 @@ body.game-fruitstack #fruitNext{font-size:31px!important;line-height:1!important
 .ttt-win-line{position:absolute;z-index:8;height:8px;border-radius:999px;transform-origin:0 50%;pointer-events:none;background:linear-gradient(90deg,#ff4fc8,#ffffff,#54ddff);box-shadow:0 0 10px #ff4fc8,0 0 22px #54ddff;transition:transform .8s cubic-bezier(.2,.85,.2,1)}
 .ttt-win-line.drawn{transform:rotate(var(--line-angle,0deg)) scaleX(1)}
 body.game-rps .toast{z-index:13000;bottom:34px;max-width:min(90vw,430px);padding:16px 20px;border-radius:20px;font-size:16px;line-height:1.25;font-weight:950;text-align:center;background:linear-gradient(135deg,#39205d,#8b3ff1 55%,#e8449a);border:1px solid #ffffff45;box-shadow:0 16px 45px #000b,inset 0 1px #ffffff55}
+
+/* v28 — win-state UX polish */
+/* Tic Tac Toe: keep board fixed; line is an absolute overlay and never participates in grid sizing. */
+.ttt-board{position:relative!important;overflow:hidden!important;width:min(100%,350px)!important;aspect-ratio:1/1!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-template-rows:repeat(3,minmax(0,1fr))!important}
+.ttt-win-line{position:absolute!important;z-index:12!important;height:7px!important;margin:0!important;padding:0!important;border:0!important;border-radius:999px!important;transform-origin:0 50%!important;transform:translateY(-50%) rotate(var(--line-angle,0deg)) scaleX(0)!important;pointer-events:none!important;background:linear-gradient(90deg,#ff4fc8,#fff,#54ddff)!important;box-shadow:0 0 9px #ff4fc8,0 0 20px #54ddff!important;transition:transform .72s cubic-bezier(.2,.85,.2,1)!important}
+.ttt-win-line.drawn{transform:translateY(-50%) rotate(var(--line-angle,0deg)) scaleX(1)!important}
+
+/* Connect 4: clearly reveal the completed connection before the delayed result. */
+.connect-board .c4-win-cell{position:relative;z-index:3;animation:c4CellWin .55s ease-in-out infinite alternate}
+.connect-board .c4-win-disc{outline:4px solid #fff;outline-offset:-3px;filter:brightness(1.28) saturate(1.2);box-shadow:0 0 0 3px #ffffff55,0 0 18px #fff,0 0 34px #ffd76a!important}
+@keyframes c4CellWin{to{transform:scale(.91)}}
+
+/* RPS round toast: intentionally much larger and higher on screen. */
+.toast.rps-round{z-index:14000!important;left:50%!important;bottom:auto!important;top:22%!important;width:min(90vw,520px)!important;max-width:520px!important;min-height:128px!important;padding:28px 24px!important;border-radius:28px!important;font-size:clamp(25px,6vw,36px)!important;line-height:1.08!important;font-weight:1000!important;letter-spacing:-.5px!important;text-align:center!important;display:flex!important;align-items:center!important;justify-content:center!important;background:linear-gradient(135deg,#3a1d63,#8d3df1 52%,#e7439c)!important;border:2px solid #ffffff66!important;box-shadow:0 24px 70px #000d,inset 0 2px #ffffff66,0 0 38px #a54cff55!important;transform:translate(-50%,-12px) scale(.86)!important}
+.toast.rps-round.show{opacity:1!important;transform:translate(-50%,0) scale(1)!important}
+
+/* Result title: make the winning player letter the visual focus in every two-player result. */
+.game-result-card h2 .result-player-prefix,.game-result-card h2 .result-player-suffix{font-size:.72em;font-weight:900;vertical-align:middle}
+.game-result-card h2 .result-player{display:inline-flex;align-items:center;justify-content:center;min-width:58px;height:58px;margin:0 5px;border-radius:18px;font-size:1.55em!important;line-height:1!important;font-weight:1000!important;color:#fff!important;-webkit-text-fill-color:#fff;text-shadow:0 3px 14px #0007;vertical-align:middle}
+.game-result-card h2 .result-player-a{background:linear-gradient(145deg,#ff58c5,#a73dff);box-shadow:0 8px 24px #d845bd55,inset 0 1px #ffffff77}
+.game-result-card h2 .result-player-b{background:linear-gradient(145deg,#43dfff,#3377ff);box-shadow:0 8px 24px #42b9ff55,inset 0 1px #ffffff77}
+@media(max-width:390px){.toast.rps-round{top:20%!important;font-size:26px!important;min-height:116px!important}.game-result-card h2 .result-player{min-width:52px;height:52px;border-radius:16px}}
